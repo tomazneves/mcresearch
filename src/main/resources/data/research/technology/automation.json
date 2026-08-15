@@ -1,0 +1,7 @@
+{
+  "name": "Automation",
+  "blocked_items": [
+    "minecraft:hopper",
+    "minecraft:dispenser"
+  ]
+}

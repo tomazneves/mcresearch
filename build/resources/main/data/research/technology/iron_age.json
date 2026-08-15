@@ -1,0 +1,6 @@
+{
+  "name": "IronAge",
+  "blocked_items": [
+    "minecraft:iron_pickaxe"
+  ]
+}

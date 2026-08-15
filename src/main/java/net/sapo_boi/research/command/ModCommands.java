@@ -1,0 +1,90 @@
+package net.sapo_boi.research.command;
+
+import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.sapo_boi.research.ResearchMod;
+import net.sapo_boi.research.network.ResearchNetworking;
+import net.sapo_boi.research.technology.RecipeFilter;
+import net.sapo_boi.research.technology.ResearchSavedData;
+import net.sapo_boi.research.technology.Technology;
+import net.sapo_boi.research.technology.TechnologyManager;
+
+import java.util.Comparator;
+
+/**
+ * Registers:
+ * /research unlock <technology>  - unlocks a technology (requires permission level 2 / OP)
+ * /research list                 - lists every known technology and its research status
+ */
+@Mod.EventBusSubscriber(modid = ResearchMod.MODID)
+public class ModCommands {
+
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        event.getDispatcher().register(
+            Commands.literal("research")
+                .then(Commands.literal("unlock")
+                    .requires(src -> src.hasPermission(2))
+                    .then(Commands.argument("technology", ResourceLocationArgument.id())
+                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(TechnologyManager.getAll().keySet(), builder))
+                        .executes(ModCommands::unlockTechnology)))
+                .then(Commands.literal("list")
+                    .executes(ModCommands::listTechnologies))
+        );
+    }
+
+    private static int unlockTechnology(CommandContext<CommandSourceStack> ctx) {
+        ResourceLocation id = ResourceLocationArgument.getId(ctx, "technology");
+        Technology tech = TechnologyManager.get(id);
+        if (tech == null) {
+            ctx.getSource().sendFailure(Component.literal("Unknown technology: " + id));
+            return 0;
+        }
+
+        MinecraftServer server = ctx.getSource().getServer();
+        ResearchSavedData data = ResearchSavedData.get(server);
+
+
+
+        if (!data.unlock(id)) {
+            ctx.getSource().sendFailure(Component.literal("Technology already researched: " + id));
+            return 0;
+        }
+
+        // gemini
+        RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
+        ctx.getSource().sendSuccess(() -> Component.literal("Unlocked technology: " + tech.name()), true);
+        ResearchNetworking.broadcastTechUnlocked(server, tech);
+        return 1;
+    }
+
+    private static int listTechnologies(CommandContext<CommandSourceStack> ctx) {
+        MinecraftServer server = ctx.getSource().getServer();
+        ResearchSavedData data = ResearchSavedData.get(server);
+
+        ctx.getSource().sendSuccess(() -> {
+            MutableComponent msg = Component.literal("Technologies:");
+            TechnologyManager.getAll().values().stream()
+                .sorted(Comparator.comparing(t -> t.id().toString()))
+                .forEach(t -> {
+                    boolean unlocked = data.isUnlocked(t.id());
+                    msg.append(Component.literal("\n - "))
+                        .append(Component.literal(t.name() + " [" + t.id() + "]")
+                            .withStyle(unlocked ? ChatFormatting.GREEN : ChatFormatting.RED));
+                });
+            return msg;
+        }, false);
+        return 1;
+    }
+}

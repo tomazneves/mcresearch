@@ -1,0 +1,6 @@
+{
+  "name": "Logistics",
+  "blocked_items": [
+    "minecraft:redstone"
+  ]
+}

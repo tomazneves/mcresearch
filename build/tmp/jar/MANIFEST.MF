@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: research
+Specification-Vendor: sapo_boi
+Specification-Version: 1
+Implementation-Title: mcresearch
+Implementation-Version: 0.0.1
+Implementation-Vendor: sapo_boi
+Implementation-Timestamp: 2026-08-15T18:04:12-0300
+
