@@ -9,6 +9,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.sapo_boi.research.recipe.RecipeFilterService;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -58,7 +59,32 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                         blockedItems.add(ResourceLocation.parse(element.getAsString())));
                 }
 
-                built.put(id, new Technology(id, name, blockedItems));
+                ResourceLocation icon = ResourceLocation.parse("minecraft:redstone");
+                List<ResourceLocation> prerequisites = new ArrayList<>();
+                List<ResourceLocation> ingredients = new ArrayList<>();
+                int time = 8;
+
+
+                if (obj.has("icon")) {
+                    icon = ResourceLocation.parse(GsonHelper.getAsString(obj, "icon"));
+                }
+
+                if (obj.has("prerequisites")) {
+                    GsonHelper.getAsJsonArray(obj, "prerequisites").forEach(element ->
+                            prerequisites.add(ResourceLocation.parse(element.getAsString())));
+                }
+
+                if (obj.has("ingredients")) {
+                    GsonHelper.getAsJsonArray(obj, "ingredients").forEach(element ->
+                            ingredients.add(ResourceLocation.parse(element.getAsString())));
+                }
+
+                if (obj.has("time")) {
+                    time = GsonHelper.getAsInt(obj, "time");
+                }
+
+
+                built.put(id, new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time));
             } catch (Exception e) {
                 LOGGER.error("Failed to parse technology {}", id, e);
             }
@@ -78,5 +104,18 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
 
     public static Collection<Technology> getAllTechnologies() {
         return TECHNOLOGIES.values(); // Adjust 'TECHNOLOGIES' to whatever you named your map field
+    }
+
+    public static void reloadTechnologies() {
+        Map<ResourceLocation, Technology> allTechs = TechnologyManager.getAll();
+        Set<ResourceLocation> unlockedTechs = ResearchSavedData.get().getUnlocked();
+
+        allTechs.forEach((location, tech) -> {
+            boolean isTechUnlocked = unlockedTechs.contains(location);
+            for (ResourceLocation blockedItem : tech.blockedItems()) {
+                if (isTechUnlocked) RecipeFilterService.restoreRecipesFor(blockedItem);
+                else RecipeFilterService.removeRecipesFor(blockedItem);
+            }
+        });
     }
 }

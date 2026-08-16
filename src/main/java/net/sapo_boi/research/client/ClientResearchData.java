@@ -33,6 +33,10 @@ public class ClientResearchData {
         UNLOCKED.add(id);
     }
 
+    public static void markLocked(ResourceLocation id) {
+        UNLOCKED.remove(id);
+    }
+
     public static Collection<Technology> getTechnologies() {
         return TECHNOLOGIES.values();
     }

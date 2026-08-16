@@ -16,6 +16,18 @@ import java.util.List;
  * @param name          human-readable display name shown in chat, toasts and the tree screen
  * @param blockedItems registry ids (namespace:path) of items/blocks - from this mod or any
  *                     other mod - that should be uncraftable until this technology is researched
+ *
+ * @param icon          registry id (namespace:path) of the icon representing the technology
+ * @param prerequisites unique id of other technologies
+ * @param ingredients   unique ids of items needed to unlock it
+ * @param time          time needed for each item to be processed
  */
-public record Technology(ResourceLocation id, String name, List<ResourceLocation> blockedItems) {
+public record Technology(
+        ResourceLocation id,
+        String name,
+        List<ResourceLocation> blockedItems,
+        ResourceLocation icon,
+        List<ResourceLocation> prerequisites,
+        List<ResourceLocation> ingredients,
+        int time) {
 }

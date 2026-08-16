@@ -1,6 +1,12 @@
 {
   "name": "IronAge",
   "blocked_items": [
-    "minecraft:iron_pickaxe"
+    "minecraft:iron_ingot",
+    "minecraft:iron_nugget",
+    "minecraft:iron_block"
+  ],
+  "icon": "minecraft:iron_ingot",
+  "prerequisites": [
+    "research:automation"
   ]
 }

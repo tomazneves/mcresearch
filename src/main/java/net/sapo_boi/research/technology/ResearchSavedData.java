@@ -7,7 +7,9 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import net.sapo_boi.research.recipe.RecipeFilterService;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -45,9 +47,29 @@ public class ResearchSavedData extends SavedData {
         boolean added = unlocked.add(techId);
         if (added) {
             setDirty();
+            Technology tech = TechnologyManager.get(techId);
+
+            tech.blockedItems().forEach(location ->
+                    RecipeFilterService.restoreRecipesFor(ForgeRegistries.ITEMS.getValue(location))
+            );
         }
         return added;
     }
+
+
+    public boolean lock(ResourceLocation techId) {
+        boolean removed = unlocked.remove(techId);
+        if (removed) {
+            setDirty();
+            Technology tech = TechnologyManager.get(techId);
+
+            tech.blockedItems().forEach(location ->
+                    RecipeFilterService.removeRecipesFor(ForgeRegistries.ITEMS.getValue(location))
+            );
+        }
+        return removed;
+    }
+
 
     public Set<ResourceLocation> getUnlocked() {
         return Collections.unmodifiableSet(unlocked);

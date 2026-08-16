@@ -15,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.sapo_boi.research.ResearchMod;
 import net.sapo_boi.research.network.ResearchNetworking;
-import net.sapo_boi.research.technology.RecipeFilter;
+//import net.sapo_boi.research.technology.RecipeFilter;
 import net.sapo_boi.research.technology.ResearchSavedData;
 import net.sapo_boi.research.technology.Technology;
 import net.sapo_boi.research.technology.TechnologyManager;
@@ -39,8 +39,15 @@ public class ModCommands {
                     .then(Commands.argument("technology", ResourceLocationArgument.id())
                         .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(TechnologyManager.getAll().keySet(), builder))
                         .executes(ModCommands::unlockTechnology)))
+                .then(Commands.literal("lock")
+                    .requires(src -> src.hasPermission(2))
+                    .then(Commands.argument("technology", ResourceLocationArgument.id())
+                        .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(TechnologyManager.getAll().keySet(), builder))
+                        .executes(ModCommands::lockTechnology)))
                 .then(Commands.literal("list")
                     .executes(ModCommands::listTechnologies))
+                .then(Commands.literal("reload")
+                    .executes(ModCommands::reloadTechnologies))
         );
     }
 
@@ -63,9 +70,33 @@ public class ModCommands {
         }
 
         // gemini
-        RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
+        //RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
+
         ctx.getSource().sendSuccess(() -> Component.literal("Unlocked technology: " + tech.name()), true);
         ResearchNetworking.broadcastTechUnlocked(server, tech);
+        return 1;
+    }
+
+
+    private static int lockTechnology(CommandContext<CommandSourceStack> ctx) {
+        ResourceLocation id = ResourceLocationArgument.getId(ctx, "technology");
+        Technology tech = TechnologyManager.get(id);
+        if (tech == null) {
+            ctx.getSource().sendFailure(Component.literal("Unknown technology: " + id));
+            return 0;
+        }
+
+        MinecraftServer server = ctx.getSource().getServer();
+        ResearchSavedData data = ResearchSavedData.get(server);
+
+
+        if (!data.lock(id)) {
+            ctx.getSource().sendFailure(Component.literal("Technology already locked: " + id));
+            return 0;
+        }
+
+        ctx.getSource().sendSuccess(() -> Component.literal("Lost technology: " + tech.name()), true);
+        ResearchNetworking.broadcastTechLocked(server, tech);
         return 1;
     }
 
@@ -86,5 +117,11 @@ public class ModCommands {
             return msg;
         }, false);
         return 1;
+    }
+
+    private static int reloadTechnologies(CommandContext<CommandSourceStack> ctx) {
+        TechnologyManager.reloadTechnologies();
+        return 1;
+
     }
 }

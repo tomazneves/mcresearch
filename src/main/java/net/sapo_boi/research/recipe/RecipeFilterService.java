@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +42,11 @@ public final class RecipeFilterService {
         }
     }
 
+    public static void removeRecipesFor(ResourceLocation location) {
+        removeRecipesFor(ForgeRegistries.ITEMS.getValue(location));
+    }
+
+
     /**
      * Restore all previously removed recipes that output the given item.
      */
@@ -50,6 +56,10 @@ public final class RecipeFilterService {
             LOGGER.info("Restoring recipes that output: {}", item);
             restoreFilteredItem(item);
         }
+    }
+
+    public static void restoreRecipesFor(ResourceLocation location) {
+        restoreRecipesFor(ForgeRegistries.ITEMS.getValue(location));
     }
 
     /**

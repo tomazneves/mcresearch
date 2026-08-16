@@ -29,13 +29,21 @@ public class ResearchNetworking {
         CHANNEL.registerMessage(nextId(), TechUnlockedToastPacket.class,
             TechUnlockedToastPacket::encode, TechUnlockedToastPacket::decode, TechUnlockedToastPacket::handle);
 
+        CHANNEL.registerMessage(nextId(), TechLockedToastPacket.class,
+                TechLockedToastPacket::encode, TechLockedToastPacket::decode, TechLockedToastPacket::handle);
+
         CHANNEL.registerMessage(nextId(), SyncTechTreePacket.class,
             SyncTechTreePacket::encode, SyncTechTreePacket::decode, SyncTechTreePacket::handle);
     }
 
     /** Shows the "researched" toast on every online player's client and marks it unlocked client-side. */
     public static void broadcastTechUnlocked(MinecraftServer server, Technology tech) {
-        CHANNEL.send(PacketDistributor.ALL.noArg(), new TechUnlockedToastPacket(tech.id(), tech.name()));
+        CHANNEL.send(PacketDistributor.ALL.noArg(), new TechUnlockedToastPacket(tech.id(), tech.name(), tech.icon()));
+    }
+
+    /** Shows the "lost" toast on every online player's client and marks it unlocked client-side. */
+    public static void broadcastTechLocked(MinecraftServer server, Technology tech) {
+        CHANNEL.send(PacketDistributor.ALL.noArg(), new TechLockedToastPacket(tech.id(), tech.name(), tech.icon()));
     }
 
     /** Sends the full tree + unlock state to a single player (used on login). */

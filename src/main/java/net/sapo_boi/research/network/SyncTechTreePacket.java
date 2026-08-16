@@ -24,14 +24,35 @@ public class SyncTechTreePacket {
     }
 
     public static void encode(SyncTechTreePacket msg, FriendlyByteBuf buf) {
+        System.out.println("Encoding...\n");
         buf.writeVarInt(msg.technologies.size());
         for (Technology tech : msg.technologies) {
+            // Existing fields
             buf.writeResourceLocation(tech.id());
             buf.writeUtf(tech.name());
+
             buf.writeVarInt(tech.blockedItems().size());
             for (ResourceLocation item : tech.blockedItems()) {
                 buf.writeResourceLocation(item);
             }
+
+            // NEW: icon
+            buf.writeResourceLocation(tech.icon());
+
+            // NEW: prerequisites
+            buf.writeVarInt(tech.prerequisites().size());
+            for (ResourceLocation prereq : tech.prerequisites()) {
+                buf.writeResourceLocation(prereq);
+            }
+
+            // NEW: ingredients
+            buf.writeVarInt(tech.ingredients().size());
+            for (ResourceLocation ingredient : tech.ingredients()) {
+                buf.writeResourceLocation(ingredient);
+            }
+
+            // NEW: time
+            buf.writeVarInt(tech.time());
         }
 
         buf.writeVarInt(msg.unlocked.size());
@@ -41,21 +62,52 @@ public class SyncTechTreePacket {
     }
 
     public static SyncTechTreePacket decode(FriendlyByteBuf buf) {
+        System.out.println("Decoding...\n");
         int techCount = buf.readVarInt();
         List<Technology> technologies = new ArrayList<>(techCount);
+        System.out.println(techCount);
+
         for (int i = 0; i < techCount; i++) {
+            // Existing fields
             ResourceLocation id = buf.readResourceLocation();
+            System.out.println(id);
+
             String name = buf.readUtf();
+            System.out.println(name);
+
             int blockedCount = buf.readVarInt();
-            List<ResourceLocation> blocked = new ArrayList<>(blockedCount);
+            System.out.println(blockedCount);
+            List<ResourceLocation> blockedItems = new ArrayList<>(blockedCount);
             for (int j = 0; j < blockedCount; j++) {
-                blocked.add(buf.readResourceLocation());
+                blockedItems.add(buf.readResourceLocation());
             }
-            technologies.add(new Technology(id, name, blocked));
+
+            // NEW: icon
+            ResourceLocation icon = buf.readResourceLocation();
+
+            // NEW: prerequisites
+            int prereqCount = buf.readVarInt();
+            List<ResourceLocation> prerequisites = new ArrayList<>(prereqCount);
+            for (int j = 0; j < prereqCount; j++) {
+                prerequisites.add(buf.readResourceLocation());
+            }
+
+            // NEW: ingredients
+            int ingredientCount = buf.readVarInt();
+            List<ResourceLocation> ingredients = new ArrayList<>(ingredientCount);
+            for (int j = 0; j < ingredientCount; j++) {
+                ingredients.add(buf.readResourceLocation());
+            }
+
+            // NEW: time
+            int time = buf.readVarInt();
+
+            // Construct with parsed fields instead of hardcoded defaults
+            technologies.add(new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time));
         }
 
         int unlockedCount = buf.readVarInt();
-        Set<ResourceLocation> unlocked = new HashSet<>();
+        Set<ResourceLocation> unlocked = new HashSet<>(unlockedCount);
         for (int i = 0; i < unlockedCount; i++) {
             unlocked.add(buf.readResourceLocation());
         }

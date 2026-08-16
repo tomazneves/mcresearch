@@ -1,5 +1,6 @@
 package net.sapo_boi.research.event;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
@@ -8,16 +9,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.sapo_boi.research.ResearchMod;
 import net.sapo_boi.research.network.ResearchNetworking;
-import net.sapo_boi.research.technology.TechnologyManager;
+import net.sapo_boi.research.recipe.RecipeFilterService;
+import net.sapo_boi.research.technology.*;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.sapo_boi.research.technology.RecipeFilter;
-import net.sapo_boi.research.technology.ResearchSavedData;
-import net.sapo_boi.research.technology.TechnologyManager;
+
+import java.util.Map;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = ResearchMod.MODID)
 public class CommonEvents {
@@ -36,7 +38,7 @@ public class CommonEvents {
         if (event.getPlayer() != null) {
             ResearchNetworking.syncToPlayer(event.getPlayer());
         } else {
-            applyRecipeFilter(event.getPlayerList().getServer());
+            //applyRecipeFilter(event.getPlayerList().getServer());
             ResearchNetworking.syncToAll(event.getPlayerList().getServer());
         }
     }
@@ -50,7 +52,8 @@ public class CommonEvents {
     // Helper method to keep things clean
     private static void applyRecipeFilter(MinecraftServer server) {
         ResearchSavedData data = ResearchSavedData.get(server);
-        RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
+        //RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
+        TechnologyManager.reloadTechnologies();
 
         // Note: You may want to broadcast a recipe sync packet to all players here
         // so their client-side recipe books update immediately after the filter applies!
