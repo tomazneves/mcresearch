@@ -16,5 +16,10 @@
   "icon": "minecraft:iron_ingot",
   "prerequisites": [
     "research:stone_age"
-  ]
+  ],
+  "ingredients": [
+    "minecraft:iron_ingot"
+  ],
+  "cost": 64,
+  "time": 30
 }

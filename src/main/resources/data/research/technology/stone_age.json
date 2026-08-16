@@ -1,0 +1,8 @@
+{
+  "name": "Stone Age",
+  "blocked_items": [
+    "minecraft:stone",
+    "minecraft:iron_ingot"
+  ],
+  "icon": "minecraft:stone"
+}

@@ -1,4 +1,6 @@
 {
   "key.research.open_tech_tree": "Open Technology Tree",
-  "key.categories.research": "Research"
+  "key.categories.research": "Research",
+  "block.research.lab": "Lab",
+  "container.research.lab": "Lab"
 }
