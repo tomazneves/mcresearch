@@ -1,10 +1,14 @@
 package net.sapo_boi.research.client;
 
-import net.sapo_boi.research.technology.ResearchSavedData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.sapo_boi.research.ResearchMod;
+import net.sapo_boi.research.network.ServerboundSetCurrentTechnologyPacket;
 import net.sapo_boi.research.technology.Technology;
-import net.sapo_boi.research.technology.TechnologyManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -15,6 +19,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
+import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
+
+import static com.ibm.icu.impl.ValidIdentifiers.Datatype.x;
 
 @OnlyIn(Dist.CLIENT)
 public class TechnologyTreeScreen extends Screen {
@@ -41,6 +49,8 @@ public class TechnologyTreeScreen extends Screen {
     private Node hovered;
     private boolean dragging;
 
+    private Button clearButton;
+
     public TechnologyTreeScreen() {
         super(Component.literal("Technology Tree"));
     }
@@ -49,21 +59,19 @@ public class TechnologyTreeScreen extends Screen {
     protected void init() {
         super.init();
 
-        this.allTechs = TechnologyManager.getAll();
-        if (this.allTechs == null) {
-            this.allTechs = new HashMap<>();
-        }
-
-        ResearchSavedData savedData = ResearchSavedData.get();
-        Set<ResourceLocation> unlockedSet = savedData != null ? savedData.getUnlocked() : null;
-        this.unlocked = unlockedSet != null ? unlockedSet : new HashSet<>();
-
-        Object currentObj = TechnologyManager.getCurrent();
-        this.current = currentObj instanceof Technology tech ? tech.id() : (ResourceLocation) currentObj;
+        this.allTechs = ClientResearchData.getTechnologies().stream()
+                .collect(Collectors.toMap(Technology::id, t -> t));
+        this.unlocked = new HashSet<>(ClientResearchData.getUnlocked());
+        this.current = ClientResearchData.getCurrentId();
 
         buildGraph();
         this.scrollX = 0;
         this.scrollY = 0;
+
+        this.clearButton = Button.builder(Component.literal("Clear Research"), b -> onClearClicked())
+                .bounds(this.width - 130, 10, 120, 20)
+                .build();
+        this.addRenderableWidget(this.clearButton);
     }
 
     private void buildGraph() {
@@ -157,8 +165,13 @@ public class TechnologyTreeScreen extends Screen {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
 
+        if (clearButton != null) {
+            clearButton.visible = current != null;
+        }
+
         if (orderedNodes.isEmpty()) {
             guiGraphics.drawCenteredString(font, Component.literal("No technologies"), this.width / 2, this.height / 2, 0xFFFFFFFF);
+            super.render(guiGraphics, mouseX, mouseY, partialTick);
             return;
         }
 
@@ -171,9 +184,47 @@ public class TechnologyTreeScreen extends Screen {
         }
         guiGraphics.disableScissor();
 
+        renderCurrentResearchBanner(guiGraphics);
+
+        // Draws the "Clear Research" button (and any other widgets) on top of the tree.
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+
         if (hovered != null) {
             renderTooltip(guiGraphics, hovered, mouseX, mouseY);
         }
+    }
+
+    /** Small always-visible banner showing the current technology and its progress. */
+    private void renderCurrentResearchBanner(GuiGraphics guiGraphics) {
+        if (current == null) {
+            return;
+        }
+
+        Technology tech = allTechs.get(current);
+        String name = tech != null ? tech.name() : current.toString();
+
+        int cost = ClientResearchData.getProgressCost();
+        int completed = ClientResearchData.getProgressCompleted();
+        float pct = cost > 0 ? Math.max(0f, Math.min(1f, (float) completed / cost)) : 0f;
+
+        int barX = 10;
+        int barY = 10;
+        int barW = 200;
+        int barH = 14;
+
+        guiGraphics.fill(barX - 2, barY - 2, barX + barW + 2, barY + barH + 12, 0xC0000000);
+        guiGraphics.fill(barX, barY, barX + barW, barY + barH, 0xFF3A3A3A);
+
+        int filled = (int) (barW * pct);
+        if (filled > 0) {
+            guiGraphics.fill(barX, barY, barX + filled, barY + barH, 0xFFFFC107);
+        }
+        guiGraphics.renderOutline(barX, barY, barW, barH, 0xFF000000);
+
+        guiGraphics.drawString(font, "Researching: " + name, barX + 2, barY + 18, 0xFFFFFFFF, true);
+        String progressText = completed + " / " + cost;
+        int textWidth = font.width(progressText);
+        guiGraphics.drawString(font, progressText, barX + barW / 2 - textWidth / 2, barY + 3, 0xFF000000, false);
     }
 
     private Node findHovered(double mouseX, double mouseY) {
@@ -189,6 +240,14 @@ public class TechnologyTreeScreen extends Screen {
         return null;
     }
 
+    private int hashClamp(String str, int min, int max) {
+        return Math.abs(str.hashCode()) % (max - min) + min;
+    }
+
+    private int hashClamp(String str, int amp) {
+        return hashClamp(str, 0, amp);
+    }
+
     private void drawConnections(GuiGraphics guiGraphics) {
         int color = 0xFF9E9E9E;
 
@@ -200,11 +259,13 @@ public class TechnologyTreeScreen extends Screen {
                 Node prereq = nodesById.get(prereqId);
                 if (prereq == null) continue;
 
+                String name = node.tech.name();
                 int x1 = prereq.x + NODE_WIDTH - (int) scrollX;
-                int y1 = prereq.y + NODE_HEIGHT / 2 - (int) scrollY;
+                int y1 = prereq.y + hashClamp(name, NODE_HEIGHT) - (int) scrollY;
                 int x2 = node.x - (int) scrollX;
-                int y2 = node.y + NODE_HEIGHT / 2 - (int) scrollY;
-                int midX = (x1 + x2) / 2;
+                int y2 = node.y + hashClamp(name, NODE_HEIGHT) - (int) scrollY;
+                ClientLevel level = Minecraft.getInstance().level;
+                int midX = hashClamp(name, x1 + 1, x2 - 1);
 
                 guiGraphics.hLine(Math.min(x1, midX), Math.max(x1, midX), y1, color);
                 guiGraphics.vLine(midX, Math.min(y1, y2), Math.max(y1, y2), color);
@@ -248,6 +309,23 @@ public class TechnologyTreeScreen extends Screen {
         }
 
         guiGraphics.drawString(font, name, textX, textY, 0xFFFFFFFF, false);
+
+        if (Objects.equals(tech.id(), current) && !unlocked.contains(tech.id())) {
+            int cost = ClientResearchData.getProgressCost();
+            int completed = ClientResearchData.getProgressCompleted();
+            float pct = cost > 0 ? Math.max(0f, Math.min(1f, (float) completed / cost)) : 0f;
+
+            int barX = x + 3;
+            int barY = y + NODE_HEIGHT - 6;
+            int barWidth = NODE_WIDTH - 6;
+            int barHeight = 3;
+
+            guiGraphics.fill(barX, barY, barX + barWidth, barY + barHeight, 0xFF1B1B1B);
+            int filled = (int) (barWidth * pct);
+            if (filled > 0) {
+                guiGraphics.fill(barX, barY, barX + filled, barY + barHeight, 0xFFFFC107);
+            }
+        }
     }
 
     private int getNodeColor(Technology tech) {
@@ -280,13 +358,16 @@ public class TechnologyTreeScreen extends Screen {
         if (unlocked.contains(tech.id())) {
             headerLines.add(Component.literal("Unlocked").withStyle(ChatFormatting.GREEN));
         } else if (Objects.equals(tech.id(), current)) {
-            headerLines.add(Component.literal("Researching...").withStyle(ChatFormatting.YELLOW));
+            String progress = ClientResearchData.getProgressCompleted() + " / " + ClientResearchData.getProgressCost();
+            headerLines.add(Component.literal("Researching... (" + progress + ")").withStyle(ChatFormatting.YELLOW));
+        } else if (arePrerequisitesMet(tech)) {
+            headerLines.add(Component.literal("Click to research").withStyle(ChatFormatting.AQUA));
         } else {
             headerLines.add(Component.literal("Locked").withStyle(ChatFormatting.RED));
         }
 
-        headerLines.add(Component.literal("Time: " + tech.time() + " ticks"));
-        headerLines.add(Component.literal("Cost: " + tech.cost() + " cycles"));
+        headerLines.add(Component.literal("Cycle time: " + tech.time() + "s per lab"));
+        headerLines.add(Component.literal("Research cost: " + tech.cost()));
 
         boolean hasIngredients = !ingredients.isEmpty();
         boolean hasBlocked = !blocked.isEmpty();
@@ -381,10 +462,83 @@ public class TechnologyTreeScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0) {
-            dragging = true;
+        // Widgets (like the Clear Research button) get first refusal so they're clickable.
+        if (super.mouseClicked(mouseX, mouseY, button)) {
+            return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+
+        if (button == 0) {
+            Node clicked = findHovered(mouseX, mouseY);
+            if (clicked != null) {
+                onNodeClicked(clicked);
+                return true;
+            }
+            dragging = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /** Selecting/clearing the current technology always goes through a confirmation dialog. */
+    private void onNodeClicked(Node node) {
+        Technology tech = node.tech;
+
+        if (unlocked.contains(tech.id())) {
+            return; // already researched, nothing to do
+        }
+
+        if (Objects.equals(tech.id(), current)) {
+            onClearClicked();
+            return;
+        }
+
+        if (!arePrerequisitesMet(tech)) {
+            return; // locked: prerequisites aren't researched yet
+        }
+
+        this.minecraft.setScreen(new ConfirmScreen(
+                confirmed -> {
+                    this.minecraft.setScreen(this);
+                    if (confirmed) {
+                        ResearchMod.CHANNEL.sendToServer(new ServerboundSetCurrentTechnologyPacket(tech.id()));
+                    }
+                },
+                Component.literal("Research " + tech.name() + "?"),
+                Component.literal("Set \"" + tech.name() + "\" as the technology currently being researched?")
+        ));
+    }
+
+    private void onClearClicked() {
+        if (current == null) {
+            return;
+        }
+
+        Technology tech = allTechs.get(current);
+        String name = tech != null ? tech.name() : current.toString();
+
+        this.minecraft.setScreen(new ConfirmScreen(
+                confirmed -> {
+                    this.minecraft.setScreen(this);
+                    if (confirmed) {
+                        ResearchMod.CHANNEL.sendToServer(new ServerboundSetCurrentTechnologyPacket(null));
+                    }
+                },
+                Component.literal("Abandon research?"),
+                Component.literal("Stop researching \"" + name + "\"? All progress on it will be lost.")
+        ));
+    }
+
+    private boolean arePrerequisitesMet(Technology tech) {
+        if (tech.prerequisites() == null) {
+            return true;
+        }
+        for (ResourceLocation prereq : tech.prerequisites()) {
+            if (!unlocked.contains(prereq)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

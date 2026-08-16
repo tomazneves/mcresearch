@@ -39,7 +39,6 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
     private static final String FOLDER = "technology";
 
     private static Map<ResourceLocation, Technology> TECHNOLOGIES = Map.of();
-    private static Technology current = null;
 
     public TechnologyManager() {
         super(new GsonBuilder().create(), FOLDER);
@@ -57,13 +56,14 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                 List<ResourceLocation> blockedItems = new ArrayList<>();
                 if (obj.has("blocked_items")) {
                     GsonHelper.getAsJsonArray(obj, "blocked_items").forEach(element ->
-                        blockedItems.add(ResourceLocation.parse(element.getAsString())));
+                            blockedItems.add(ResourceLocation.parse(element.getAsString())));
                 }
 
                 ResourceLocation icon = ResourceLocation.parse("minecraft:redstone");
                 List<ResourceLocation> prerequisites = new ArrayList<>();
                 List<ResourceLocation> ingredients = new ArrayList<>();
                 int time = 8;
+                int cost = 100;
 
 
                 if (obj.has("icon")) {
@@ -84,8 +84,11 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                     time = GsonHelper.getAsInt(obj, "time");
                 }
 
+                if (obj.has("cost")) {
+                    cost = GsonHelper.getAsInt(obj, "cost");
+                }
 
-                built.put(id, new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time, 67));
+                built.put(id, new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time, cost));
             } catch (Exception e) {
                 LOGGER.error("Failed to parse technology {}", id, e);
             }
@@ -107,6 +110,21 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
         return TECHNOLOGIES.values(); // Adjust 'TECHNOLOGIES' to whatever you named your map field
     }
 
+    /**
+     * @return true if every prerequisite of {@code tech} is already unlocked (vacuously true if it has none)
+     */
+    public static boolean prerequisitesMet(ResearchSavedData data, Technology tech) {
+        if (tech.prerequisites() == null) {
+            return true;
+        }
+        for (ResourceLocation prereq : tech.prerequisites()) {
+            if (!data.isUnlocked(prereq)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void reloadTechnologies() {
         Map<ResourceLocation, Technology> allTechs = TechnologyManager.getAll();
         Set<ResourceLocation> unlockedTechs = ResearchSavedData.get().getUnlocked();
@@ -120,11 +138,4 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
         });
     }
 
-    public static Technology getCurrent() {
-        return current;
-    }
-
-    public static void setCurrent(Technology technology) {
-        current = technology;
-    }
 }
