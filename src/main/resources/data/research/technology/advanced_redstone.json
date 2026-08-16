@@ -1,0 +1,15 @@
+{
+  "name": "Advanced Redstone",
+  "blocked_items": [
+    "minecraft:observer",
+    "minecraft:comparator",
+    "minecraft:sticky_piston",
+    "minecraft:slime_block",
+    "minecraft:honey_block",
+    "minecraft:daylight_detector"
+  ],
+  "icon": "minecraft:observer",
+  "prerequisites": [
+    "research:redstone_basics"
+  ]
+}

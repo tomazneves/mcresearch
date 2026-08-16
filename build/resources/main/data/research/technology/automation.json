@@ -3,5 +3,9 @@
   "blocked_items": [
     "minecraft:hopper",
     "minecraft:dispenser"
-  ]
+  ],
+  "prerequisites": [
+    "research:logistics"
+  ],
+  "icon": "minecraft:hopper"
 }

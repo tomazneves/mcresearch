@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class ClientResearchData {
     private static Map<ResourceLocation, Technology> TECHNOLOGIES = new HashMap<>();
     private static final Set<ResourceLocation> UNLOCKED = new HashSet<>();
+    private static Technology CURRENT = null;
 
     public static void update(List<Technology> technologies, Set<ResourceLocation> unlocked) {
         TECHNOLOGIES = technologies.stream().collect(Collectors.toMap(Technology::id, t -> t));
@@ -35,6 +36,10 @@ public class ClientResearchData {
 
     public static void markLocked(ResourceLocation id) {
         UNLOCKED.remove(id);
+    }
+
+    public static void setCurrent(Technology tech) {
+        CURRENT = tech;
     }
 
     public static Collection<Technology> getTechnologies() {

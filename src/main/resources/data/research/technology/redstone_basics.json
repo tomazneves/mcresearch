@@ -1,0 +1,15 @@
+{
+  "name": "Redstone Basics",
+  "blocked_items": [
+    "minecraft:redstone",
+    "minecraft:redstone_torch",
+    "minecraft:repeater",
+    "minecraft:piston",
+    "minecraft:dispenser",
+    "minecraft:dropper"
+  ],
+  "icon": "minecraft:redstone",
+  "prerequisites": [
+    "research:iron_age"
+  ]
+}

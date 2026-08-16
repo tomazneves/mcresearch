@@ -1,0 +1,12 @@
+{
+  "name": "Elytra Flight",
+  "blocked_items": [
+    "minecraft:elytra",
+    "minecraft:firework_rocket",
+    "minecraft:shulker_box"
+  ],
+  "icon": "minecraft:elytra",
+  "prerequisites": [
+    "research:the_end"
+  ]
+}

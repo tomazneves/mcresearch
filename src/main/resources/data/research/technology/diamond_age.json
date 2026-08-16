@@ -1,0 +1,18 @@
+{
+  "name": "Diamond Age",
+  "blocked_items": [
+    "minecraft:diamond_pickaxe",
+    "minecraft:diamond_axe",
+    "minecraft:diamond_sword",
+    "minecraft:diamond_hoe",
+    "minecraft:diamond_shovel",
+    "minecraft:diamond_helmet",
+    "minecraft:diamond_boots",
+    "minecraft:diamond_leggings",
+    "minecraft:diamond_chestplate"
+  ],
+  "icon": "minecraft:diamond",
+  "prerequisites": [
+    "research:iron_age"
+  ]
+}

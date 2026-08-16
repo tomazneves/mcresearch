@@ -1,0 +1,12 @@
+{
+  "name": "The End",
+  "blocked_items": [
+    "minecraft:ender_eye",
+    "minecraft:end_crystal"
+  ],
+  "icon": "minecraft:ender_eye",
+  "prerequisites": [
+    "research:potion_brewing",
+    "research:enchanting"
+  ]
+}

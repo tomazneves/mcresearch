@@ -39,6 +39,7 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
     private static final String FOLDER = "technology";
 
     private static Map<ResourceLocation, Technology> TECHNOLOGIES = Map.of();
+    private static Technology current = null;
 
     public TechnologyManager() {
         super(new GsonBuilder().create(), FOLDER);
@@ -84,7 +85,7 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                 }
 
 
-                built.put(id, new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time));
+                built.put(id, new Technology(id, name, blockedItems, icon, prerequisites, ingredients, time, 67));
             } catch (Exception e) {
                 LOGGER.error("Failed to parse technology {}", id, e);
             }
@@ -117,5 +118,13 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                 else RecipeFilterService.removeRecipesFor(blockedItem);
             }
         });
+    }
+
+    public static Technology getCurrent() {
+        return current;
+    }
+
+    public static void setCurrent(Technology technology) {
+        current = technology;
     }
 }

@@ -1,0 +1,15 @@
+{
+  "name": "Potion Brewing",
+  "blocked_items": [
+    "minecraft:brewing_stand",
+    "minecraft:glass_bottle",
+    "minecraft:fermented_spider_eye",
+    "minecraft:magma_cream",
+    "minecraft:glistering_melon_slice",
+    "minecraft:golden_carrot"
+  ],
+  "icon": "minecraft:brewing_stand",
+  "prerequisites": [
+    "research:nether_exploration"
+  ]
+}

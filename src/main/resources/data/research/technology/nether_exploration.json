@@ -1,0 +1,12 @@
+{
+  "name": "Nether Exploration",
+  "blocked_items": [
+    "minecraft:obsidian",
+    "minecraft:flint_and_steel",
+    "minecraft:respawn_anchor"
+  ],
+  "icon": "minecraft:obsidian",
+  "prerequisites": [
+    "research:diamond_age"
+  ]
+}

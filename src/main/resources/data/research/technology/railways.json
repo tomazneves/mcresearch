@@ -1,0 +1,14 @@
+{
+  "name": "Railways",
+  "blocked_items": [
+    "minecraft:minecart",
+    "minecraft:rail",
+    "minecraft:powered_rail",
+    "minecraft:detector_rail",
+    "minecraft:activator_rail"
+  ],
+  "icon": "minecraft:minecart",
+  "prerequisites": [
+    "research:iron_age"
+  ]
+}

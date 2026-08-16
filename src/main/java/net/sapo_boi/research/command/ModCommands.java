@@ -48,6 +48,14 @@ public class ModCommands {
                     .executes(ModCommands::listTechnologies))
                 .then(Commands.literal("reload")
                     .executes(ModCommands::reloadTechnologies))
+                    .then(Commands.literal("current")
+                            .requires(src -> src.hasPermission(2))
+                            .then(Commands.literal("set")
+                                    .then(Commands.argument("technology", ResourceLocationArgument.id())
+                                            .suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(TechnologyManager.getAll().keySet(), builder))
+                                            .executes(ModCommands::setCurrentTechnology)))
+                            .then(Commands.literal("unset")
+                                    .executes(ModCommands::unsetCurrentTechnology)))
         );
     }
 
@@ -123,5 +131,22 @@ public class ModCommands {
         TechnologyManager.reloadTechnologies();
         return 1;
 
+    }
+
+    private static int setCurrentTechnology(CommandContext<CommandSourceStack> ctx) {
+        ResourceLocation id = ResourceLocationArgument.getId(ctx, "technology");
+        Technology tech = TechnologyManager.get(id);
+        if (tech == null) {
+            ctx.getSource().sendFailure(Component.literal("Unknown technology: " + id));
+            return 0;
+        }
+
+        TechnologyManager.setCurrent(tech);
+        return 1;
+    }
+
+    private static int unsetCurrentTechnology(CommandContext<CommandSourceStack> ctx) {
+        TechnologyManager.setCurrent(null);
+        return 1;
     }
 }

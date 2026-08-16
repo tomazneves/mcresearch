@@ -1,0 +1,14 @@
+{
+  "name": "Enchanting",
+  "blocked_items": [
+    "minecraft:enchanting_table",
+    "minecraft:bookshelf",
+    "minecraft:experience_bottle",
+    "minecraft:anvil",
+    "minecraft:grindstone"
+  ],
+  "icon": "minecraft:enchanting_table",
+  "prerequisites": [
+    "research:diamond_age"
+  ]
+}

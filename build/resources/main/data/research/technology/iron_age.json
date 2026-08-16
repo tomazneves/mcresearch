@@ -1,12 +1,20 @@
 {
-  "name": "IronAge",
+  "name": "Iron Age",
   "blocked_items": [
-    "minecraft:iron_ingot",
-    "minecraft:iron_nugget",
-    "minecraft:iron_block"
+    "minecraft:iron_pickaxe",
+    "minecraft:iron_axe",
+    "minecraft:iron_sword",
+    "minecraft:iron_hoe",
+    "minecraft:iron_shovel",
+    "minecraft:iron_helmet",
+    "minecraft:iron_boots",
+    "minecraft:iron_leggings",
+    "minecraft:iron_chestplate",
+    "minecraft:shears",
+    "minecraft:bucket"
   ],
   "icon": "minecraft:iron_ingot",
   "prerequisites": [
-    "research:automation"
+    "research:stone_age"
   ]
 }

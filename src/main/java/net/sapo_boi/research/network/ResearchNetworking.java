@@ -34,6 +34,9 @@ public class ResearchNetworking {
 
         CHANNEL.registerMessage(nextId(), SyncTechTreePacket.class,
             SyncTechTreePacket::encode, SyncTechTreePacket::decode, SyncTechTreePacket::handle);
+
+        CHANNEL.registerMessage(nextId(), TechnologyPacket.class,
+                TechnologyPacket::encode, TechnologyPacket::decode, TechnologyPacket::handle);
     }
 
     /** Shows the "researched" toast on every online player's client and marks it unlocked client-side. */
@@ -53,6 +56,7 @@ public class ResearchNetworking {
         SyncTechTreePacket packet = new SyncTechTreePacket(
             new ArrayList<>(TechnologyManager.getAll().values()), data.getUnlocked());
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
+        //CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new TechnologyPacket(TechnologyManager.getCurrent()));
     }
 
     /** Sends the full tree + unlock state to everyone (used after a /reload). */
@@ -61,5 +65,6 @@ public class ResearchNetworking {
         SyncTechTreePacket packet = new SyncTechTreePacket(
             new ArrayList<>(TechnologyManager.getAll().values()), data.getUnlocked());
         CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
+        //CHANNEL.send(PacketDistributor.ALL.noArg(), new TechnologyPacket(TechnologyManager.getCurrent()));
     }
 }

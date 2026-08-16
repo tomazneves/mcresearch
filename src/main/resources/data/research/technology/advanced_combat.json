@@ -1,0 +1,13 @@
+{
+  "name": "Advanced Combat",
+  "blocked_items": [
+    "minecraft:shield",
+    "minecraft:trident",
+    "minecraft:tipped_arrow"
+  ],
+  "icon": "minecraft:shield",
+  "prerequisites": [
+    "research:iron_age",
+    "research:archery"
+  ]
+}

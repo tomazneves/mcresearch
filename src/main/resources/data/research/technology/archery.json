@@ -1,0 +1,14 @@
+{
+  "name": "Archery",
+  "blocked_items": [
+    "minecraft:bow",
+    "minecraft:arrow",
+    "minecraft:crossbow",
+    "minecraft:fletching_table",
+    "minecraft:target"
+  ],
+  "icon": "minecraft:bow",
+  "prerequisites": [
+    "research:stone_age"
+  ]
+}

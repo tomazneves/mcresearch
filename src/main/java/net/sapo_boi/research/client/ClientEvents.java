@@ -18,7 +18,7 @@ public class ClientEvents {
         Minecraft mc = Minecraft.getInstance();
         while (ModKeyMappings.OPEN_TECH_TREE.consumeClick()) {
             if (mc.screen == null) {
-                mc.setScreen(new TechnologyTreeScreen());
+                mc.setScreen(new net.sapo_boi.research.client.TechnologyTreeScreen());
             }
         }
     }
