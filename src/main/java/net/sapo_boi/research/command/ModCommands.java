@@ -79,15 +79,16 @@ public class ModCommands {
         MinecraftServer server = ctx.getSource().getServer();
         ResearchSavedData data = ResearchSavedData.get(server);
 
-
+        if (tech.id() == data.getCurrentTechnology()) {
+            //ResearchController.setCurrentResearchProgress(ctx.getSource().getServer(), 0);
+            ResearchController.clearCurrent(ctx.getSource().getServer());
+            return 1;
+        }
 
         if (!data.unlock(id)) {
             ctx.getSource().sendFailure(Component.literal("Technology already researched: " + id));
             return 0;
         }
-
-        // gemini
-        //RecipeFilter.updateGlobalRecipes(server, TechnologyManager.getAllTechnologies(), data);
 
         ctx.getSource().sendSuccess(() -> Component.literal("Unlocked technology: " + tech.name()), true);
         ResearchNetworking.broadcastTechUnlocked(server, tech);

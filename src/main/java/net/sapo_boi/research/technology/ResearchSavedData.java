@@ -56,6 +56,9 @@ public class ResearchSavedData extends SavedData {
      */
     public boolean unlock(ResourceLocation techId) {
         boolean added = unlocked.add(techId);
+        ResearchSavedData data = ResearchSavedData.get();
+        if (data.currentTechnology == techId) data.clearCurrentTechnology();
+
         if (added) {
             setDirty();
             Technology tech = TechnologyManager.get(techId);
@@ -88,6 +91,13 @@ public class ResearchSavedData extends SavedData {
 
     public ResourceLocation getCurrentTechnology() {
         return currentTechnology;
+    }
+
+    public double getCurrentProgress() {
+        if (currentTechnology == null) return 0.0;
+        double cost = this.currentTechnologyCost;
+        double remaining = this.remainingWork;
+        return 1.0 - remaining / cost;
     }
 
     public int getRemainingWork() {

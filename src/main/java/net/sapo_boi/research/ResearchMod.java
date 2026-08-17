@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -33,6 +34,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.sapo_boi.research.client.hud.TechnologyHudOverlay;
 import net.sapo_boi.research.item.ModCreativeModeTabs;
 import net.sapo_boi.research.item.ModItems;
 import net.sapo_boi.research.lab.LabScreen;
@@ -158,6 +160,11 @@ public class ResearchMod
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
             MenuScreens.register(ResearchMod.LAB_MENU.get(), LabScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void registerOverlays(RegisterGuiOverlaysEvent event) {
+            TechnologyHudOverlay.registerOverlay(event);
         }
     }
 }

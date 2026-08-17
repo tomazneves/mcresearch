@@ -7,6 +7,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 import net.sapo_boi.research.client.ClientResearchData;
 import net.sapo_boi.research.client.ClientResearchHandler;
+import net.sapo_boi.research.client.TechnologyToast;
 
 import java.util.function.Supplier;
 
@@ -35,7 +36,7 @@ public class TechUnlockedToastPacket {
         NetworkEvent.Context ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             ClientResearchData.markUnlocked(msg.id);
-            ClientResearchHandler.showToast(msg.name, msg.icon, "Technology researched!");
+            ClientResearchHandler.showToast(msg.name, msg.icon, "Technology researched!", TechnologyToast.BACKGROUND_COLOR);
         }));
         ctx.setPacketHandled(true);
     }

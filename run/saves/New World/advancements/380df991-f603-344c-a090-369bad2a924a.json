@@ -355,6 +355,7 @@
   },
   "minecraft:adventure/kill_all_mobs": {
     "criteria": {
+      "minecraft:creeper": "2026-08-17 17:22:52 -0300",
       "minecraft:husk": "2026-08-17 09:02:06 -0300"
     },
     "done": false
@@ -362,6 +363,18 @@
   "minecraft:adventure/kill_a_mob": {
     "criteria": {
       "minecraft:husk": "2026-08-17 09:02:06 -0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/misc/firework_rocket_simple": {
+    "criteria": {
+      "has_gunpowder": "2026-08-17 17:23:03 -0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/tnt": {
+    "criteria": {
+      "has_gunpowder": "2026-08-17 17:23:03 -0300"
     },
     "done": true
   },

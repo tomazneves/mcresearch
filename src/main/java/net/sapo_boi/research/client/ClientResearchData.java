@@ -87,6 +87,12 @@ public class ClientResearchData {
         return progressCost;
     }
 
+    public static double getCurrentProgress() {
+        double cost = progressCost;
+        double remaining = progressRemaining;
+        return 1.0 - remaining / cost;
+    }
+
     public static int getProgressCompleted() {
         return Math.max(0, progressCost - progressRemaining);
     }

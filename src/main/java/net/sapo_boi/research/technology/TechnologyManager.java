@@ -59,7 +59,7 @@ public class TechnologyManager extends SimpleJsonResourceReloadListener {
                             blockedItems.add(ResourceLocation.parse(element.getAsString())));
                 }
 
-                ResourceLocation icon = ResourceLocation.parse("minecraft:redstone");
+                ResourceLocation icon = ResourceLocation.parse("research:science_pack_1");
                 List<ResourceLocation> prerequisites = new ArrayList<>();
                 List<ResourceLocation> ingredients = new ArrayList<>();
                 int time = 8;
