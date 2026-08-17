@@ -1,7 +1,6 @@
 {
   "variants": {
-    "": {
-      "model": "research:block/lab"
-    }
+    "lit=false": { "model": "research:block/lab" },
+    "lit=true": { "model": "research:block/lab" }
   }
 }

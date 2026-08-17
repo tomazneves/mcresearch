@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.sapo_boi.research.ResearchMod;
+import net.sapo_boi.research.lab.LabBlock;
 
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
@@ -26,6 +27,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.PACK5.get());
                         pOutput.accept(ModItems.PACK6.get());
                         pOutput.accept(ModItems.PACK7.get());
+                        pOutput.accept(ResearchMod.LAB_BLOCK_ITEM.get());
 
                     })
                     .build());

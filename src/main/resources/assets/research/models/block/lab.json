@@ -3,8 +3,8 @@
 	"credit": "Made with Blockbench",
 	"render_type": "cutout",
 	"textures": {
-		"0": "lab_v2",
-		"particle": "lab_v2"
+		"0": "research:block/lab",
+		"particle": "research:block/lab"
 	},
 	"elements": [
 		{
@@ -82,19 +82,6 @@
 				"west": {"uv": [8, 9.5, 9.5, 14.5], "texture": "#0"},
 				"up": {"uv": [8.5, 6, 10, 7.5], "texture": "#0"},
 				"down": {"uv": [8.5, 6, 10, 7.5], "texture": "#0"}
-			}
-		},
-		{
-			"from": [2, 2, 2],
-			"to": [14, 14, 14],
-			"rotation": {"angle": 0, "axis": "y", "origin": [2, 2, 2]},
-			"faces": {
-				"north": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"east": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"south": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"west": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"up": {"uv": [0, 0, 8, 8], "texture": "#0"},
-				"down": {"uv": [0, 0, 8, 8], "texture": "#0"}
 			}
 		},
 		{

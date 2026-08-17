@@ -69,10 +69,10 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, LabBlockEntity lab) {
-        lab.tickServer();
+        lab.tickServer(state);
     }
 
-    private void tickServer() {
+    private void tickServer(BlockState state) {
         if (level == null || level.isClientSide) {
             return;
         }
@@ -81,6 +81,8 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
         if (server == null) {
             return;
         }
+
+        boolean wasLit = fuelBurnTime > 0;
 
         ResearchSavedData data = ResearchSavedData.get(server);
         ResourceLocation currentId = data.getCurrentTechnology();
@@ -116,6 +118,14 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
                     }
                 }
             }
+        }
+
+        boolean isLit = fuelBurnTime > 0;
+        if (isLit != wasLit) {
+            // Flag 3 = notify neighbors + sync to clients; same convention vanilla's furnace uses
+            // for its own LIT toggle. The light engine picks up the new light level automatically
+            // once the state (and therefore lightLevel()) changes.
+            level.setBlock(worldPosition, state.setValue(LabBlock.LIT, isLit), 3);
         }
     }
 

@@ -70,7 +70,10 @@ public class ResearchMod
             () -> new LabBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
                     .strength(3.5F)
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .lightLevel(state -> state.getValue(LabBlock.LIT) ? 13 : 0)   // <-- this line
+            ));
 
     public static final RegistryObject<Item> LAB_BLOCK_ITEM = ITEMS.register("lab",
             () -> new BlockItem(LAB_BLOCK.get(), new Item.Properties()));
@@ -81,24 +84,6 @@ public class ResearchMod
 
     public static final RegistryObject<MenuType<LabMenu>> LAB_MENU =
             MENUS.register("lab", () -> IForgeMenuType.create(LabMenu::createClientMenu));
-
-    // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
-    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-    // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
-    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
-
-    // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
-    public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
-            .alwaysEat().nutrition(1).saturationMod(2f).build())));
-
-    // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
-    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
-            .displayItems((parameters, output) -> {
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-            }).build());
-
 
     private static final String PROTOCOL_VERSION = "1";
 
@@ -132,9 +117,6 @@ public class ResearchMod
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
-        modEventBus.addListener(this::addCreative);
-
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -154,15 +136,6 @@ public class ResearchMod
         LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(EXAMPLE_BLOCK_ITEM);
-            event.accept(LAB_BLOCK_ITEM);
-        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -188,3 +161,14 @@ public class ResearchMod
         }
     }
 }
+
+/*
+public static final RegistryObject<Block> LAB_BLOCK = BLOCKS.register("lab", () -> new LabBlock(
+    BlockBehaviour.Properties.of()
+        .mapColor(MapColor.METAL)
+        .strength(3.5F)
+        .noOcclusion()
+        .lightLevel(state -> state.getValue(LabBlock.LIT) ? 13 : 0)   // <-- this line
+));
+
+ */
