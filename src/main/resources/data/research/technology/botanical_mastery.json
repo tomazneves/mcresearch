@@ -1,0 +1,21 @@
+{
+    "name": "Botanical Mastery",
+    "blocked_items": [
+        "botania:overgrowth_seed",
+        "botania:creative_pool"
+    ],
+    "icon": "botania:overgrowth_seed",
+    "prerequisites": [
+        "research:relic_mastery"
+    ],
+    "time": 300,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

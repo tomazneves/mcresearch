@@ -1,0 +1,21 @@
+{
+    "name": "Sea Serpent Hunting",
+    "blocked_items": [
+        "iceandfire:sea_serpent_scales_blue",
+        "iceandfire:tide_trident"
+    ],
+    "icon": "iceandfire:sea_serpent_scales_blue",
+    "prerequisites": [
+        "research:dread_invasion"
+    ],
+    "time": 350,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

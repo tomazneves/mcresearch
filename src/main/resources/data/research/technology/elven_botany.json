@@ -1,0 +1,19 @@
+{
+    "name": "Elven Botany",
+    "blocked_items": [
+        "botania:elementium_ingot",
+        "botania:dragonstone"
+    ],
+    "icon": "botania:elementium_ingot",
+    "prerequisites": [
+        "research:elven_knowledge"
+    ],
+    "time": 130,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

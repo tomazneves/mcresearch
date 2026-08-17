@@ -129,12 +129,41 @@ Adding input to inheritance map
 Processing entries
 Conflicting propagated mapping for net/sapo_boi/research/technology/ResearchSavedData/save(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag; from net/minecraft/world/level/saveddata/SavedData/save(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;: save -> m_7176_
 Conflicting propagated mapping for net/sapo_boi/research/technology/TechnologyManager/apply(Ljava/lang/Object;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V from net/minecraft/server/packs/resources/SimplePreparableReloadListener/apply(Ljava/lang/Object;Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)V: apply -> m_5787_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/load(Lnet/minecraft/nbt/CompoundTag;)V from net/minecraft/world/level/block/entity/BlockEntity/load(Lnet/minecraft/nbt/CompoundTag;)V: load -> m_142466_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/saveAdditional(Lnet/minecraft/nbt/CompoundTag;)V from net/minecraft/world/level/block/entity/BlockEntity/saveAdditional(Lnet/minecraft/nbt/CompoundTag;)V: saveAdditional -> m_183515_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/createMenu(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/inventory/AbstractContainerMenu; from net/minecraft/world/inventory/MenuConstructor/createMenu(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/inventory/AbstractContainerMenu;: createMenu -> m_7208_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/getDisplayName()Lnet/minecraft/network/chat/Component; from net/minecraft/world/MenuProvider/getDisplayName()Lnet/minecraft/network/chat/Component;: getDisplayName -> m_5446_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/getCount()I from net/minecraft/world/inventory/ContainerData/getCount()I: getCount -> m_6499_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/get(I)I from net/minecraft/world/inventory/ContainerData/get(I)I: get -> m_6413_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlockEntity/set(II)V from net/minecraft/world/inventory/ContainerData/set(II)V: set -> m_8050_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabMenu/stillValid(Lnet/minecraft/world/entity/player/Player;)Z from net/minecraft/world/inventory/AbstractContainerMenu/stillValid(Lnet/minecraft/world/entity/player/Player;)Z: stillValid -> m_6875_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabMenu/quickMoveStack(Lnet/minecraft/world/entity/player/Player;I)Lnet/minecraft/world/item/ItemStack; from net/minecraft/world/inventory/AbstractContainerMenu/quickMoveStack(Lnet/minecraft/world/entity/player/Player;I)Lnet/minecraft/world/item/ItemStack;: quickMoveStack -> m_7648_
 Conflicting propagated mapping for net/minecraftforge/event/BuildCreativeModeTabContentsEvent/accept(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/CreativeModeTab$TabVisibility;)V from net/minecraft/world/item/CreativeModeTab$Output/accept(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/CreativeModeTab$TabVisibility;)V: accept -> m_246267_
-Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyToast/render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/components/toasts/ToastComponent;J)Lnet/minecraft/client/gui/components/toasts/Toast$Visibility; from net/minecraft/client/gui/components/toasts/Toast/render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/components/toasts/ToastComponent;J)Lnet/minecraft/client/gui/components/toasts/Toast$Visibility;: render -> m_7172_
-Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/isPauseScreen()Z from net/minecraft/client/gui/screens/Screen/isPauseScreen()Z: isPauseScreen -> m_7043_
-Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V from net/minecraft/client/gui/screens/Screen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V: render -> m_88315_
-Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/init()V from net/minecraft/client/gui/screens/Screen/init()V: init -> m_7856_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/set(Lnet/minecraft/world/item/ItemStack;)V from net/minecraft/world/inventory/Slot/set(Lnet/minecraft/world/item/ItemStack;)V: set -> m_5852_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/mayPlace(Lnet/minecraft/world/item/ItemStack;)Z from net/minecraft/world/inventory/Slot/mayPlace(Lnet/minecraft/world/item/ItemStack;)Z: mayPlace -> m_5857_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/remove(I)Lnet/minecraft/world/item/ItemStack; from net/minecraft/world/inventory/Slot/remove(I)Lnet/minecraft/world/item/ItemStack;: remove -> m_6201_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/onQuickCraft(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V from net/minecraft/world/inventory/Slot/onQuickCraft(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V: onQuickCraft -> m_40234_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/getItem()Lnet/minecraft/world/item/ItemStack; from net/minecraft/world/inventory/Slot/getItem()Lnet/minecraft/world/item/ItemStack;: getItem -> m_7993_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/getMaxStackSize(Lnet/minecraft/world/item/ItemStack;)I from net/minecraft/world/inventory/Slot/getMaxStackSize(Lnet/minecraft/world/item/ItemStack;)I: getMaxStackSize -> m_5866_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/mayPickup(Lnet/minecraft/world/entity/player/Player;)Z from net/minecraft/world/inventory/Slot/mayPickup(Lnet/minecraft/world/entity/player/Player;)Z: mayPickup -> m_8010_
+Conflicting propagated mapping for net/minecraftforge/items/SlotItemHandler/getMaxStackSize()I from net/minecraft/world/inventory/Slot/getMaxStackSize()I: getMaxStackSize -> m_6641_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabMenu$FuelSlot/mayPlace(Lnet/minecraft/world/item/ItemStack;)Z from net/minecraftforge/items/SlotItemHandler/mayPlace(Lnet/minecraft/world/item/ItemStack;)Z: mayPlace -> m_5857_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlock/onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V from net/minecraft/world/level/block/state/BlockBehaviour/onRemove(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)V: onRemove -> m_6810_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlock/getTicker(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntityType;)Lnet/minecraft/world/level/block/entity/BlockEntityTicker; from net/minecraft/world/level/block/EntityBlock/getTicker(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntityType;)Lnet/minecraft/world/level/block/entity/BlockEntityTicker;: getTicker -> m_142354_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlock/newBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/entity/BlockEntity; from net/minecraft/world/level/block/EntityBlock/newBlockEntity(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/entity/BlockEntity;: newBlockEntity -> m_142194_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlock/getRenderShape(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/RenderShape; from net/minecraft/world/level/block/BaseEntityBlock/getRenderShape(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/RenderShape;: getRenderShape -> m_7514_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabBlock/use(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult; from net/minecraft/world/level/block/state/BlockBehaviour/use(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;: use -> m_6227_
 Conflicting propagated mapping for net/minecraft/world/entity/LivingEntity/lambda$addAdditionalSaveData$3(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/nbt/Tag;)V from net/minecraft/world/entity/player/Player/lambda$addAdditionalSaveData$3(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/nbt/Tag;)V: lambda$addAdditionalSaveData$3 -> m_219754_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabScreen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V from net/minecraft/client/gui/screens/inventory/AbstractContainerScreen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V: render -> m_88315_
+Conflicting propagated mapping for net/sapo_boi/research/lab/LabScreen/renderBg(Lnet/minecraft/client/gui/GuiGraphics;FII)V from net/minecraft/client/gui/screens/inventory/AbstractContainerScreen/renderBg(Lnet/minecraft/client/gui/GuiGraphics;FII)V: renderBg -> m_7286_
+Conflicting propagated mapping for net/minecraftforge/network/IContainerFactory/create(ILnet/minecraft/world/entity/player/Inventory;)Lnet/minecraft/world/inventory/AbstractContainerMenu; from net/minecraft/world/inventory/MenuType$MenuSupplier/create(ILnet/minecraft/world/entity/player/Inventory;)Lnet/minecraft/world/inventory/AbstractContainerMenu;: create -> m_39994_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V from net/minecraft/client/gui/screens/Screen/render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V: render -> m_88315_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/mouseScrolled(DDD)Z from net/minecraft/client/gui/components/events/ContainerEventHandler/mouseScrolled(DDD)Z: mouseScrolled -> m_6050_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/init()V from net/minecraft/client/gui/screens/Screen/init()V: init -> m_7856_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/mouseClicked(DDI)Z from net/minecraft/client/gui/components/events/ContainerEventHandler/mouseClicked(DDI)Z: mouseClicked -> m_6375_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/mouseDragged(DDIDD)Z from net/minecraft/client/gui/components/events/ContainerEventHandler/mouseDragged(DDIDD)Z: mouseDragged -> m_7979_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyToast/render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/components/toasts/ToastComponent;J)Lnet/minecraft/client/gui/components/toasts/Toast$Visibility; from net/minecraft/client/gui/components/toasts/Toast/render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/components/toasts/ToastComponent;J)Lnet/minecraft/client/gui/components/toasts/Toast$Visibility;: render -> m_7172_
+Conflicting propagated mapping for net/sapo_boi/research/client/TechnologyTreeScreen/mouseReleased(DDI)Z from net/minecraft/client/gui/components/events/ContainerEventHandler/mouseReleased(DDI)Z: mouseReleased -> m_6348_
 Adding extras
 Sorting
 Writing Output: /Users/tomaz/Documents/GitHub/mcresearch/build/reobfJar/output.jar
@@ -143,14 +172,129 @@ Writing Output: /Users/tomaz/Documents/GitHub/mcresearch/build/reobfJar/output.j
   META-INF/mods.toml
   assets/
   assets/research/
+  assets/research/blockstates/
+  assets/research/blockstates/lab.json
   assets/research/lang/
   assets/research/lang/en_us.json
+  assets/research/models/
+  assets/research/models/block/
+  assets/research/models/block/lab.json
+  assets/research/models/item/
+  assets/research/models/item/lab.json
+  assets/research/models/item/science_pack_1.json
+  assets/research/models/item/science_pack_2.json
+  assets/research/models/item/science_pack_3.json
+  assets/research/models/item/science_pack_4.json
+  assets/research/models/item/science_pack_5.json
+  assets/research/models/item/science_pack_6.json
+  assets/research/models/item/science_pack_7.json
+  assets/research/textures/
+  assets/research/textures/block/
+  assets/research/textures/block/lab.png
+  assets/research/textures/gui/
+  assets/research/textures/gui/blast_furnace.png
+  assets/research/textures/gui/lab.png
+  assets/research/textures/gui/lab.psd
+  assets/research/textures/gui/lab_new.png
+  assets/research/textures/gui/lab_old.png
+  assets/research/textures/item/
+  assets/research/textures/item/potion.png
+  assets/research/textures/item/potion_overlay.png
+  assets/research/textures/item/science_pack_1.png
+  assets/research/textures/item/science_pack_2.png
+  assets/research/textures/item/science_pack_3.png
+  assets/research/textures/item/science_pack_4.png
+  assets/research/textures/item/science_pack_5.png
+  assets/research/textures/item/science_pack_6.png
+  assets/research/textures/item/science_pack_7.png
   data/
   data/research/
+  data/research/loot_tables/
+  data/research/loot_tables/blocks/
+  data/research/loot_tables/blocks/lab.json
   data/research/technology/
-  data/research/technology/automation.json
-  data/research/technology/iron_age.json
+  data/research/technology/advanced_firearms.json
+  data/research/technology/advanced_kinetics.json
+  data/research/technology/agriculture.json
+  data/research/technology/aluminium_processing.json
+  data/research/technology/andesite_machinery.json
+  data/research/technology/basic_alchemy.json
+  data/research/technology/basic_firearms.json
+  data/research/technology/basic_metallurgy.json
+  data/research/technology/basic_survival.json
+  data/research/technology/botanical_brewing.json
+  data/research/technology/botanical_mastery.json
+  data/research/technology/brass_machinery.json
+  data/research/technology/bronze_age.json
+  data/research/technology/diamond_steel_gear.json
+  data/research/technology/dragon_forging.json
+  data/research/technology/dragon_hunting.json
+  data/research/technology/dragonsteel_smelting.json
+  data/research/technology/dread_invasion.json
+  data/research/technology/elven_botany.json
+  data/research/technology/elven_knowledge.json
+  data/research/technology/exo_suit_tech.json
+  data/research/technology/explosives.json
+  data/research/technology/extreme_voltage.json
+  data/research/technology/floral_magic.json
+  data/research/technology/gaia_ritual.json
+  data/research/technology/gorgon_slaying.json
+  data/research/technology/greate_aluminium.json
+  data/research/technology/greate_basics.json
+  data/research/technology/greate_darmstadtium.json
+  data/research/technology/greate_naquadah.json
+  data/research/technology/greate_neutronium.json
+  data/research/technology/greate_stainless.json
+  data/research/technology/greate_titanium.json
+  data/research/technology/greate_tungsten.json
+  data/research/technology/high_voltage.json
+  data/research/technology/hippogryph_taming.json
+  data/research/technology/insane_voltage.json
+  data/research/technology/integrated_circuits.json
+  data/research/technology/iron_armaments.json
   data/research/technology/logistics.json
+  data/research/technology/low_voltage.json
+  data/research/technology/ludicrous_voltage.json
+  data/research/technology/mana_manipulation.json
+  data/research/technology/medium_voltage.json
+  data/research/technology/myrmex_harvesting.json
+  data/research/technology/omnipotence.json
+  data/research/technology/petrochemistry.json
+  data/research/technology/plasma_weaponry.json
+  data/research/technology/relic_mastery.json
+  data/research/technology/rotational_power.json
+  data/research/technology/runic_magic.json
+  data/research/technology/sea_serpent_hunting.json
+  data/research/technology/silver_and_copper.json
+  data/research/technology/spark_logistics.json
+  data/research/technology/steam_power.json
+  data/research/technology/steel_smelting.json
+  data/research/technology/stymphalian_archery.json
+  data/research/technology/terrasteel_infusion.json
+  data/research/technology/train_logistics.json
+  data/research/technology/treated_brass_arms.json
+  data/research/technology/troll_hunting.json
+  data/research/technology/uhv_voltage.json
+  data/research/technology/ultimate_voltage.json
+  data/research/technology/zpm_voltage.json
+  data/research/technology2/
+  data/research/technology2/advanced_combat.json
+  data/research/technology2/advanced_redstone.json
+  data/research/technology2/agriculture.json
+  data/research/technology2/archery.json
+  data/research/technology2/automation.json
+  data/research/technology2/diamond_age.json
+  data/research/technology2/elytra_flight.json
+  data/research/technology2/enchanting.json
+  data/research/technology2/iron_age.json
+  data/research/technology2/logistics.json
+  data/research/technology2/nether_exploration.json
+  data/research/technology2/netherite_forging.json
+  data/research/technology2/potion_brewing.json
+  data/research/technology2/railways.json
+  data/research/technology2/redstone_basics.json
+  data/research/technology2/stone_age.json
+  data/research/technology2/the_end.json
   net/
   net/sapo_boi/
   net/sapo_boi/research/
@@ -163,22 +307,40 @@ Writing Output: /Users/tomaz/Documents/GitHub/mcresearch/build/reobfJar/output.j
   net/sapo_boi/research/client/ClientResearchHandler.class
   net/sapo_boi/research/client/ModKeyMappings.class
   net/sapo_boi/research/client/TechnologyToast.class
+  net/sapo_boi/research/client/TechnologyTreeScreen$Node.class
   net/sapo_boi/research/client/TechnologyTreeScreen.class
   net/sapo_boi/research/command/
+  net/sapo_boi/research/command/ModCommands$1.class
   net/sapo_boi/research/command/ModCommands.class
   net/sapo_boi/research/event/
   net/sapo_boi/research/event/CommonEvents.class
+  net/sapo_boi/research/item/
+  net/sapo_boi/research/item/ModCreativeModeTabs.class
+  net/sapo_boi/research/item/ModItems.class
+  net/sapo_boi/research/lab/
+  net/sapo_boi/research/lab/LabBlock.class
+  net/sapo_boi/research/lab/LabBlockEntity$1.class
+  net/sapo_boi/research/lab/LabBlockEntity.class
+  net/sapo_boi/research/lab/LabMenu$FuelSlot.class
+  net/sapo_boi/research/lab/LabMenu.class
+  net/sapo_boi/research/lab/LabScreen.class
   net/sapo_boi/research/network/
+  net/sapo_boi/research/network/CurrentResearchPacket.class
   net/sapo_boi/research/network/ResearchNetworking.class
+  net/sapo_boi/research/network/ServerboundSetCurrentTechnologyPacket.class
   net/sapo_boi/research/network/SyncTechTreePacket.class
   net/sapo_boi/research/network/TechLockedToastPacket.class
   net/sapo_boi/research/network/TechUnlockedToastPacket.class
+  net/sapo_boi/research/network/TechnologyPacket.class
   net/sapo_boi/research/recipe/
   net/sapo_boi/research/recipe/RecipeFilterCommands.class
   net/sapo_boi/research/recipe/RecipeFilterReloadListener.class
   net/sapo_boi/research/recipe/RecipeFilterService.class
   net/sapo_boi/research/technology/
   net/sapo_boi/research/technology/RecipeFilter.class
+  net/sapo_boi/research/technology/ResearchController$1.class
+  net/sapo_boi/research/technology/ResearchController$Result.class
+  net/sapo_boi/research/technology/ResearchController.class
   net/sapo_boi/research/technology/ResearchSavedData.class
   net/sapo_boi/research/technology/Technology.class
   net/sapo_boi/research/technology/TechnologyManager.class

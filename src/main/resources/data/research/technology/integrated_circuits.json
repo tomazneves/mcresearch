@@ -1,0 +1,19 @@
+{
+    "name": "Integrated Circuits",
+    "blocked_items": [
+        "gtceu:micro_processor",
+        "gtceu:nano_processor"
+    ],
+    "icon": "gtceu:micro_processor",
+    "prerequisites": [
+        "research:high_voltage"
+    ],
+    "time": 130,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

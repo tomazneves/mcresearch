@@ -1,0 +1,17 @@
+{
+    "name": "Basic Firearms",
+    "blocked_items": [
+        "scguns:boomstick",
+        "scguns:flintlock_pistol",
+        "scguns:gunpowder_dust"
+    ],
+    "icon": "scguns:flintlock_pistol",
+    "prerequisites": [
+        "research:basic_metallurgy"
+    ],
+    "time": 30,
+    "cost": 40,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

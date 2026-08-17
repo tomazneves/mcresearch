@@ -1,0 +1,17 @@
+{
+    "name": "Low Voltage (LV)",
+    "blocked_items": [
+        "gtceu:lv_machine_hull",
+        "gtceu:basic_electronic_circuit"
+    ],
+    "icon": "gtceu:lv_machine_hull",
+    "prerequisites": [
+        "research:steam_power"
+    ],
+    "time": 60,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
+}

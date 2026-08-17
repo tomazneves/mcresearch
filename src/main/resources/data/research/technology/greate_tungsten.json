@@ -1,0 +1,20 @@
+{
+    "name": "Greate Tungsten",
+    "blocked_items": [
+        "greate:tungsten_steel_cogwheel",
+        "greate:large_tungsten_steel_cogwheel"
+    ],
+    "icon": "greate:tungsten_steel_cogwheel",
+    "prerequisites": [
+        "research:ludicrous_voltage"
+    ],
+    "time": 240,
+    "cost": 125,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

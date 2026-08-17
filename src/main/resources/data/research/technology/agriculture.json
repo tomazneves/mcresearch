@@ -1,15 +1,16 @@
 {
-  "name": "Agriculture",
-  "blocked_items": [
-    "minecraft:wheat_seeds",
-    "minecraft:pumpkin_seeds",
-    "minecraft:melon_seeds",
-    "minecraft:beetroot_seeds",
-    "minecraft:composter",
-    "minecraft:bread"
-  ],
-  "icon": "minecraft:wheat",
-  "prerequisites": [
-    "research:stone_age"
-  ]
+    "name": "Agriculture",
+    "blocked_items": [
+        "minecraft:wheat_seeds",
+        "minecraft:stone_hoe"
+    ],
+    "icon": "minecraft:wheat",
+    "prerequisites": [
+        "research:basic_survival"
+    ],
+    "time": 15,
+    "cost": 20,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
 }

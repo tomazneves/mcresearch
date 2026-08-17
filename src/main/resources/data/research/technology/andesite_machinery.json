@@ -1,0 +1,17 @@
+{
+    "name": "Andesite Machinery",
+    "blocked_items": [
+        "create:andesite_alloy",
+        "create:shaft",
+        "create:cogwheel"
+    ],
+    "icon": "create:andesite_alloy",
+    "prerequisites": [
+        "research:basic_metallurgy"
+    ],
+    "time": 30,
+    "cost": 40,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

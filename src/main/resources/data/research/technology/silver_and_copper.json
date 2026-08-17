@@ -1,0 +1,18 @@
+{
+    "name": "Silver and Copper",
+    "blocked_items": [
+        "iceandfire:silver_ingot",
+        "iceandfire:silver_sword",
+        "iceandfire:copper_sword"
+    ],
+    "icon": "iceandfire:silver_ingot",
+    "prerequisites": [
+        "research:low_voltage"
+    ],
+    "time": 60,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "name": "Mana Manipulation",
+    "blocked_items": [
+        "botania:mana_pool",
+        "botania:mana_spreader"
+    ],
+    "icon": "botania:mana_pool",
+    "prerequisites": [
+        "research:floral_magic"
+    ],
+    "time": 40,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

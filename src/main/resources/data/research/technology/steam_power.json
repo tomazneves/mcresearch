@@ -1,0 +1,17 @@
+{
+    "name": "Steam Power",
+    "blocked_items": [
+        "gtceu:lp_steam_solid_boiler",
+        "gtceu:lp_steam_alloy_smelter"
+    ],
+    "icon": "gtceu:lp_steam_solid_boiler",
+    "prerequisites": [
+        "research:bronze_age",
+        "research:rotational_power"
+    ],
+    "time": 50,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

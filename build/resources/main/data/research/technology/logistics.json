@@ -1,9 +1,17 @@
 {
-  "name": "Logistics",
-  "blocked_items": [
-    "minecraft:redstone",
-    "minecraft:redstone_block",
-    "minecraft:redstone_torch"
-  ],
-  "icon": "minecraft:redstone"
+    "name": "Logistics",
+    "blocked_items": [
+        "create:belt_connector",
+        "create:chute"
+    ],
+    "icon": "create:belt_connector",
+    "prerequisites": [
+        "research:rotational_power"
+    ],
+    "time": 45,
+    "cost": 25,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
 }

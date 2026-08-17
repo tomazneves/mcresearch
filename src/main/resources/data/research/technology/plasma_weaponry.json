@@ -1,0 +1,21 @@
+{
+    "name": "Plasma Weaponry",
+    "blocked_items": [
+        "scguns:plasma_core",
+        "scguns:plasgun"
+    ],
+    "icon": "scguns:plasma_core",
+    "prerequisites": [
+        "research:advanced_firearms",
+        "research:extreme_voltage"
+    ],
+    "time": 180,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

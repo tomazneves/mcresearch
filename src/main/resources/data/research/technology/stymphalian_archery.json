@@ -1,0 +1,18 @@
+{
+    "name": "Stymphalian Archery",
+    "blocked_items": [
+        "iceandfire:stymphalian_arrow",
+        "iceandfire:stymphalian_bird_dagger"
+    ],
+    "icon": "iceandfire:stymphalian_arrow",
+    "prerequisites": [
+        "research:silver_and_copper"
+    ],
+    "time": 100,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3"
+    ]
+}

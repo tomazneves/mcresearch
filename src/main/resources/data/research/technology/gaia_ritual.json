@@ -1,0 +1,20 @@
+{
+    "name": "Gaia Ritual",
+    "blocked_items": [
+        "botania:gaia_ingot",
+        "botania:gaia_pylon"
+    ],
+    "icon": "botania:gaia_ingot",
+    "prerequisites": [
+        "research:elven_botany"
+    ],
+    "time": 180,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

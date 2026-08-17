@@ -14,9 +14,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -35,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LabBlockEntity extends BlockEntity implements MenuProvider, ContainerData {
+
 
     private final ItemStackHandler inventory = new ItemStackHandler(10) {
         @Override
@@ -81,6 +87,7 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
         Technology tech = currentId == null ? null : TechnologyManager.get(currentId);
 
         boolean canProcess = tech != null && hasIngredients(tech);
+        if (tech == null) processTimer = 0;
 
         if (fuelBurnTime > 0) {
             fuelBurnTime--;
@@ -92,14 +99,10 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
                     consumeIngredients(tech);
                     ResearchController.advanceCurrentResearch(server, 1);
                 }
-            } else {
-                processTimer = 0;
             }
 
             setChanged();
         } else {
-            processTimer = 0;
-
             if (canProcess) {
                 ItemStack fuelStack = inventory.getStackInSlot(0);
                 if (!fuelStack.isEmpty()) {
@@ -108,7 +111,6 @@ public class LabBlockEntity extends BlockEntity implements MenuProvider, Contain
                         fuelBurnTime = burnTime;
                         fuelBurnTimeTotal = burnTime;
                         fuelStack.shrink(1);
-                        processTimer = 0;
                         currentCycleDuration = Math.max(1, tech.time() * 20);
                         setChanged();
                     }

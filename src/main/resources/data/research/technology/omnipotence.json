@@ -1,0 +1,25 @@
+{
+    "name": "Omnipotence",
+    "blocked_items": [
+        "gtceu:uiv_machine_casing",
+        "gtceu:uxv_machine_casing",
+        "create:creative_motor"
+    ],
+    "icon": "create:creative_motor",
+    "prerequisites": [
+        "research:uhv_voltage",
+        "research:botanical_mastery",
+        "research:exo_suit_tech",
+        "research:dread_invasion"
+    ],
+    "time": 600,
+    "cost": 500,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

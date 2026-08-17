@@ -1,0 +1,21 @@
+{
+    "name": "Zero Point Module (ZPM)",
+    "blocked_items": [
+        "gtceu:zpm_machine_hull",
+        "gtceu:zpm_energy_input_hatch"
+    ],
+    "icon": "gtceu:zpm_machine_hull",
+    "prerequisites": [
+        "research:ludicrous_voltage"
+    ],
+    "time": 250,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

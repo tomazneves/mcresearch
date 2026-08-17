@@ -1,0 +1,21 @@
+{
+    "name": "Dragonsteel Smelting",
+    "blocked_items": [
+        "iceandfire:dragonsteel_fire_ingot",
+        "iceandfire:dragonsteel_ice_sword"
+    ],
+    "icon": "iceandfire:dragonsteel_fire_ingot",
+    "prerequisites": [
+        "research:dragon_forging"
+    ],
+    "time": 250,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

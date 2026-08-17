@@ -1,0 +1,21 @@
+{
+    "name": "Ultra High Voltage (UHV)",
+    "blocked_items": [
+        "gtceu:uhv_machine_hull",
+        "gtceu:uhv_energy_input_hatch"
+    ],
+    "icon": "gtceu:uhv_machine_hull",
+    "prerequisites": [
+        "research:ultimate_voltage"
+    ],
+    "time": 400,
+    "cost": 150,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

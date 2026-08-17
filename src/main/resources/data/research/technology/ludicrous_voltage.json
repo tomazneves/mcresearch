@@ -1,0 +1,20 @@
+{
+    "name": "Ludicrous Voltage (LuV)",
+    "blocked_items": [
+        "gtceu:luv_machine_hull",
+        "gtceu:luv_energy_input_hatch"
+    ],
+    "icon": "gtceu:luv_machine_hull",
+    "prerequisites": [
+        "research:insane_voltage"
+    ],
+    "time": 220,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

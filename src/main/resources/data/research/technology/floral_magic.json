@@ -1,0 +1,17 @@
+{
+    "name": "Floral Magic",
+    "blocked_items": [
+        "botania:white_mystical_flower",
+        "botania:pure_daisy",
+        "botania:twig_wand"
+    ],
+    "icon": "botania:white_mystical_flower",
+    "prerequisites": [
+        "research:agriculture"
+    ],
+    "time": 30,
+    "cost": 40,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

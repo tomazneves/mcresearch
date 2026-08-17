@@ -1,0 +1,17 @@
+{
+    "name": "Basic Alchemy",
+    "blocked_items": [
+        "botania:alchemy_catalyst",
+        "botania:brewery"
+    ],
+    "icon": "botania:alchemy_catalyst",
+    "prerequisites": [
+        "research:mana_manipulation"
+    ],
+    "time": 60,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
+}

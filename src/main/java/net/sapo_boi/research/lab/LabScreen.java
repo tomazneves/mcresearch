@@ -25,16 +25,16 @@ public class LabScreen extends AbstractContainerScreen<LabMenu> {
     private static final int FLAME_SIZE_Y = 14;
 
     // Progress arrow overlay UV
-    private static final int ARROW_OVERLAY_U = 176;
-    private static final int ARROW_OVERLAY_V = 14;
-    private static final int ARROW_SIZE_X = 24;
-    private static final int ARROW_SIZE_Y = 17;
+    private static final int ARROW_OVERLAY_U = 0;
+    private static final int ARROW_OVERLAY_V = 234;
+    private static final int ARROW_SIZE_X = 126;
+    private static final int ARROW_SIZE_Y = 22;
 
     // Positions of dynamic elements (relative to GUI top-left)
-    private static final int FLAME_X = 140;      // same as fuel slot
-    private static final int FLAME_Y = 71;       // below the fuel slot
-    private static final int ARROW_X = 100;
-    private static final int ARROW_Y = 35;
+    private static final int FLAME_X = 8;      // same as fuel slot
+    private static final int FLAME_Y = 35;       // below the fuel slot
+    private static final int ARROW_X = 42;
+    private static final int ARROW_Y = 49;
 
     public LabScreen(LabMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);

@@ -1,0 +1,16 @@
+{
+    "name": "Basic Metallurgy",
+    "blocked_items": [
+        "minecraft:iron_ingot",
+        "minecraft:copper_ingot"
+    ],
+    "icon": "minecraft:iron_ingot",
+    "prerequisites": [
+        "research:basic_survival"
+    ],
+    "time": 20,
+    "cost": 30,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

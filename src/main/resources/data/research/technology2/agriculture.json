@@ -1,0 +1,15 @@
+{
+  "name": "Agriculture",
+  "blocked_items": [
+    "minecraft:wheat_seeds",
+    "minecraft:pumpkin_seeds",
+    "minecraft:melon_seeds",
+    "minecraft:beetroot_seeds",
+    "minecraft:composter",
+    "minecraft:bread"
+  ],
+  "icon": "minecraft:wheat",
+  "prerequisites": [
+    "research:stone_age"
+  ]
+}

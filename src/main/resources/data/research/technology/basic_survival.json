@@ -1,0 +1,14 @@
+{
+    "name": "Basic Survival",
+    "blocked_items": [
+        "minecraft:crafting_table",
+        "minecraft:furnace"
+    ],
+    "icon": "minecraft:crafting_table",
+    "prerequisites": [],
+    "time": 10,
+    "cost": 10,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

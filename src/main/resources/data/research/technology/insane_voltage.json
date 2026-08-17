@@ -1,0 +1,20 @@
+{
+    "name": "Insane Voltage (IV)",
+    "blocked_items": [
+        "gtceu:iv_machine_hull",
+        "gtceu:iv_energy_output_hatch"
+    ],
+    "icon": "gtceu:iv_machine_hull",
+    "prerequisites": [
+        "research:extreme_voltage"
+    ],
+    "time": 180,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "name": "Bronze Age",
+    "blocked_items": [
+        "gtceu:bronze_ingot",
+        "gtceu:bronze_machine_casing"
+    ],
+    "icon": "gtceu:bronze_ingot",
+    "prerequisites": [
+        "research:basic_metallurgy"
+    ],
+    "time": 40,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

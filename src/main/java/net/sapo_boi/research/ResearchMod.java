@@ -3,6 +3,8 @@ package net.sapo_boi.research;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
@@ -31,6 +33,8 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.sapo_boi.research.item.ModCreativeModeTabs;
+import net.sapo_boi.research.item.ModItems;
 import net.sapo_boi.research.lab.LabScreen;
 import net.sapo_boi.research.network.ResearchNetworking;
 import org.slf4j.Logger;
@@ -115,6 +119,13 @@ public class ResearchMod
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+
+
+        // Creative Tabs
+        ModCreativeModeTabs.register(modEventBus);
+
+        // Blocks & Items
+        ModItems.register(modEventBus);
         BLOCK_ENTITIES.register(modEventBus);
         MENUS.register(modEventBus);
 

@@ -1,0 +1,17 @@
+{
+    "name": "Explosives",
+    "blocked_items": [
+        "scguns:grenade",
+        "scguns:nitro_powder"
+    ],
+    "icon": "scguns:nitro_powder",
+    "prerequisites": [
+        "research:iron_armaments"
+    ],
+    "time": 75,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
+}

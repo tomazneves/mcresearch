@@ -26,10 +26,10 @@ public class LabMenu extends AbstractContainerMenu {
     private static final int PLAYER_END = 46;
 
     // New slot positions (relative to GUI top-left)
-    private static final int INGREDIENT_GRID_X = 30;
+    private static final int INGREDIENT_GRID_X = 8;
     private static final int INGREDIENT_GRID_Y = 17;
-    private static final int FUEL_SLOT_X = 140;
-    private static final int FUEL_SLOT_Y = 53;
+    private static final int FUEL_SLOT_X = 8;
+    private static final int FUEL_SLOT_Y = 51;
 
     private final ContainerLevelAccess access;
     private final ContainerData data;
@@ -72,8 +72,8 @@ public class LabMenu extends AbstractContainerMenu {
         addSlot(new FuelSlot(handler, FUEL_SLOT, FUEL_SLOT_X, FUEL_SLOT_Y));
 
         // 3x3 ingredient grid (indices 1-9)
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
+        for (int row = 0; row < 1; row++) {
+            for (int col = 0; col < 9; col++) {
                 int slotIndex = INGREDIENT_START + row * 3 + col;
                 addSlot(new SlotItemHandler(handler, slotIndex,
                         INGREDIENT_GRID_X + col * 18,

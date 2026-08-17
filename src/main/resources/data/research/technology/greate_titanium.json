@@ -1,0 +1,20 @@
+{
+    "name": "Greate Titanium",
+    "blocked_items": [
+        "greate:titanium_cogwheel",
+        "greate:large_titanium_cogwheel"
+    ],
+    "icon": "greate:titanium_cogwheel",
+    "prerequisites": [
+        "research:insane_voltage"
+    ],
+    "time": 200,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

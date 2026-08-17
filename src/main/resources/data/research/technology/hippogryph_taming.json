@@ -1,0 +1,20 @@
+{
+    "name": "Hippogryph Taming",
+    "blocked_items": [
+        "iceandfire:hippogryph_sword",
+        "iceandfire:iron_hippogryph_armor"
+    ],
+    "icon": "iceandfire:hippogryph_sword",
+    "prerequisites": [
+        "research:myrmex_harvesting"
+    ],
+    "time": 200,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

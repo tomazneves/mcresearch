@@ -1,0 +1,19 @@
+{
+    "name": "Advanced Kinetics",
+    "blocked_items": [
+        "create:encased_chain_drive",
+        "create:clutch",
+        "create:gearshift"
+    ],
+    "icon": "create:encased_chain_drive",
+    "prerequisites": [
+        "research:greate_basics"
+    ],
+    "time": 90,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3"
+    ]
+}

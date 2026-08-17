@@ -1,0 +1,19 @@
+{
+    "name": "Diamond Steel Gear",
+    "blocked_items": [
+        "scguns:diamond_steel_ingot",
+        "scguns:diamond_steel_gun_frame"
+    ],
+    "icon": "scguns:diamond_steel_ingot",
+    "prerequisites": [
+        "research:treated_brass_arms",
+        "research:medium_voltage"
+    ],
+    "time": 100,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3"
+    ]
+}

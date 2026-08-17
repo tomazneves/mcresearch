@@ -1,0 +1,22 @@
+{
+    "name": "Exo Suit Tech",
+    "blocked_items": [
+        "scguns:exo_suit_core",
+        "scguns:exo_suit_chestplate"
+    ],
+    "icon": "scguns:exo_suit_core",
+    "prerequisites": [
+        "research:plasma_weaponry",
+        "research:zpm_voltage"
+    ],
+    "time": 250,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

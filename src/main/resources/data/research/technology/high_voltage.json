@@ -1,0 +1,20 @@
+{
+    "name": "High Voltage (HV)",
+    "blocked_items": [
+        "gtceu:hv_machine_hull",
+        "gtceu:advanced_integrated_circuit"
+    ],
+    "icon": "gtceu:hv_machine_hull",
+    "prerequisites": [
+        "research:aluminium_processing",
+        "research:petrochemistry"
+    ],
+    "time": 120,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

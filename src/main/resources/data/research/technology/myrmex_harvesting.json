@@ -1,0 +1,19 @@
+{
+    "name": "Myrmex Harvesting",
+    "blocked_items": [
+        "iceandfire:myrmex_desert_chitin",
+        "iceandfire:myrmex_jungle_sword"
+    ],
+    "icon": "iceandfire:myrmex_desert_chitin",
+    "prerequisites": [
+        "research:dragon_hunting"
+    ],
+    "time": 150,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

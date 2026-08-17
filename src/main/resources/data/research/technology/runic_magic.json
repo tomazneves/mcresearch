@@ -1,0 +1,18 @@
+{
+    "name": "Runic Magic",
+    "blocked_items": [
+        "botania:runic_altar",
+        "botania:rune_water",
+        "botania:rune_fire"
+    ],
+    "icon": "botania:runic_altar",
+    "prerequisites": [
+        "research:mana_manipulation"
+    ],
+    "time": 75,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2"
+    ]
+}

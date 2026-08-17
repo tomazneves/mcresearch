@@ -1,0 +1,19 @@
+{
+    "name": "Advanced Firearms",
+    "blocked_items": [
+        "scguns:advanced_round",
+        "scguns:auto_turret"
+    ],
+    "icon": "scguns:advanced_round",
+    "prerequisites": [
+        "research:diamond_steel_gear"
+    ],
+    "time": 120,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

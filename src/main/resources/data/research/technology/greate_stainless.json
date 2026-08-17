@@ -1,0 +1,20 @@
+{
+    "name": "Greate Stainless",
+    "blocked_items": [
+        "greate:stainless_steel_cogwheel",
+        "greate:large_stainless_steel_cogwheel"
+    ],
+    "icon": "greate:stainless_steel_cogwheel",
+    "prerequisites": [
+        "research:extreme_voltage",
+        "research:greate_aluminium"
+    ],
+    "time": 150,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}

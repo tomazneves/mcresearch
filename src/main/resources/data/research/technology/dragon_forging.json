@@ -1,0 +1,21 @@
+{
+    "name": "Dragon Forging",
+    "blocked_items": [
+        "iceandfire:dragonforge_fire_core",
+        "iceandfire:dragonforge_ice_brick"
+    ],
+    "icon": "iceandfire:dragonforge_fire_core",
+    "prerequisites": [
+        "research:dragon_hunting",
+        "research:extreme_voltage"
+    ],
+    "time": 180,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

@@ -2,5 +2,13 @@
   "key.research.open_tech_tree": "Open Technology Tree",
   "key.categories.research": "Research",
   "block.research.lab": "Lab",
-  "container.research.lab": "Lab"
+  "container.research.lab": "Lab",
+  "creativetab.research_tab": "Research",
+  "item.research.science_pack_1": "Science Pack 1",
+  "item.research.science_pack_2": "Science Pack 2",
+  "item.research.science_pack_3": "Science Pack 3",
+  "item.research.science_pack_4": "Science Pack 4",
+  "item.research.science_pack_5": "Science Pack 5",
+  "item.research.science_pack_6": "Science Pack 6",
+  "item.research.science_pack_7": "Science Pack 7"
 }

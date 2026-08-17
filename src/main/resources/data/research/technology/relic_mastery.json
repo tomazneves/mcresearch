@@ -1,0 +1,20 @@
+{
+    "name": "Relic Mastery",
+    "blocked_items": [
+        "botania:dice",
+        "botania:king_key"
+    ],
+    "icon": "botania:dice",
+    "prerequisites": [
+        "research:gaia_ritual"
+    ],
+    "time": 220,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5"
+    ]
+}

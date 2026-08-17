@@ -1,0 +1,16 @@
+{
+    "name": "Rotational Power",
+    "blocked_items": [
+        "create:water_wheel",
+        "create:large_water_wheel"
+    ],
+    "icon": "create:water_wheel",
+    "prerequisites": [
+        "research:andesite_machinery"
+    ],
+    "time": 40,
+    "cost": 50,
+    "ingredients": [
+        "research:science_pack_1"
+    ]
+}

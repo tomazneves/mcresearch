@@ -1,0 +1,21 @@
+{
+    "name": "Greate Naquadah",
+    "blocked_items": [
+        "greate:naquadah_alloy_cogwheel",
+        "greate:large_naquadah_alloy_cogwheel"
+    ],
+    "icon": "greate:naquadah_alloy_cogwheel",
+    "prerequisites": [
+        "research:ultimate_voltage"
+    ],
+    "time": 300,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

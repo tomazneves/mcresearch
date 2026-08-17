@@ -1,0 +1,21 @@
+{
+    "name": "Dread Invasion",
+    "blocked_items": [
+        "iceandfire:dread_sword",
+        "iceandfire:dread_knight_sword"
+    ],
+    "icon": "iceandfire:dread_sword",
+    "prerequisites": [
+        "research:dragonsteel_smelting"
+    ],
+    "time": 300,
+    "cost": 75,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4",
+        "research:science_pack_5",
+        "research:science_pack_6"
+    ]
+}

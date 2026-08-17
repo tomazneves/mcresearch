@@ -1,0 +1,19 @@
+{
+    "name": "Extreme Voltage (EV)",
+    "blocked_items": [
+        "gtceu:ev_machine_hull",
+        "gtceu:ev_energy_input_hatch"
+    ],
+    "icon": "gtceu:ev_machine_hull",
+    "prerequisites": [
+        "research:high_voltage"
+    ],
+    "time": 150,
+    "cost": 100,
+    "ingredients": [
+        "research:science_pack_1",
+        "research:science_pack_2",
+        "research:science_pack_3",
+        "research:science_pack_4"
+    ]
+}
