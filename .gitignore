@@ -16,6 +16,11 @@ out
 # gradle
 build
 .gradle
+.gradle/**
+.gradle**
+
+# build
+build/**
 
 # other
 eclipse
