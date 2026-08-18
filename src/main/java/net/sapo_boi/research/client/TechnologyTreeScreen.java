@@ -1,6 +1,5 @@
 package net.sapo_boi.research.client;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -70,7 +69,9 @@ public class TechnologyTreeScreen extends Screen {
     private TechnologyTree tree;
 
     // Tree layout
-    private final List<TreeRenderNode> treeNodes = new ArrayList<>();
+    private final Map<ResourceLocation, TreeRenderNode> treeNodes = new HashMap<>();
+    private final Map<TreeRenderNode, ResourceLocation> dummyNodes = new HashMap<>();
+    //private final List<TreeRenderNode> treeNodesOLD = new ArrayList<>();
     private final List<TreeConnection> treeConnections = new ArrayList<>();
     private int treeContentWidth;
     private int treeContentHeight;
@@ -107,7 +108,6 @@ public class TechnologyTreeScreen extends Screen {
         this.selected = current; // initially focus on the current research, if any
         this.hovered = null;
 
-        buildChildrenMap();
         buildGridOrder();
         buildTreeLayout();
 
@@ -133,17 +133,6 @@ public class TechnologyTreeScreen extends Screen {
         this.init();
     }
 
-    private void buildChildrenMap() {
-        childrenMap.clear();
-        for (Technology tech : allTechs.values()) {
-            if (tech.prerequisites() != null) {
-                for (ResourceLocation prereq : tech.prerequisites()) {
-                    childrenMap.computeIfAbsent(prereq, k -> new ArrayList<>()).add(tech.id());
-                }
-            }
-        }
-    }
-
     private void buildGridOrder() {
         List<ResourceLocation> ids = new ArrayList<>(allTechs.keySet());
         ids.sort(Comparator
@@ -159,6 +148,20 @@ public class TechnologyTreeScreen extends Screen {
         int columns = getGridColumns();
         int rows = (int) Math.ceil((double) gridOrder.size() / columns);
         gridContentHeight = rows * (GRID_CELL_SIZE + GRID_CELL_PADDING) + 4;
+    }
+
+    private int sortGrid(ResourceLocation id) {
+        int score;
+        int size = tree.getAllIds().size();
+        if (unlocked.contains(id)) score = 0;
+        else if (Objects.equals(id, current)) score = 2 * size;
+        else {
+            Technology tech = allTechs.get(id);
+            if (tech != null && arePrerequisitesMet(tech)) score = 3 * size;
+            else score = 4 * size;
+        }
+        score += tree.topologicalSortIds().indexOf(id);
+        return score;
     }
 
     private int getGridGroupOrder(ResourceLocation id) {
@@ -191,73 +194,11 @@ public class TechnologyTreeScreen extends Screen {
         return Math.max(0, this.height - MARGINS * 2);
     }
 
-    /**
-     * Finds the longest path (as a list of technology IDs) that follows ancestor → descendant
-     * relationships among the nodes present in {@code visibleReal}.
-     *
-     * @param visibleReal the subset of technologies currently visible in the tree
-     * @return the longest path, or an empty list if the set is empty
-     */
-    private List<ResourceLocation> findLongestPath(Set<ResourceLocation> visibleReal) {
-        if (visibleReal.isEmpty()) {
-            return List.of();
-        }
-
-        // Build adjacency map: parent -> list of children (only within visibleReal)
-        Map<ResourceLocation, List<ResourceLocation>> children = new HashMap<>();
-        for (ResourceLocation id : visibleReal) {
-            Technology tech = allTechs.get(id);
-            if (tech != null && tech.prerequisites() != null) {
-                for (ResourceLocation prereq : tech.prerequisites()) {
-                    if (visibleReal.contains(prereq)) {
-                        children.computeIfAbsent(prereq, k -> new ArrayList<>()).add(id);
-                    }
-                }
-            }
-        }
-
-        // Memoization for DFS: maps a node to the longest path starting from that node
-        Map<ResourceLocation, List<ResourceLocation>> memo = new HashMap<>();
-        List<ResourceLocation> overallLongest = List.of();
-
-        for (ResourceLocation id : visibleReal) {
-            List<ResourceLocation> path = dfsLongest(id, children, memo);
-            if (path.size() > overallLongest.size()) {
-                overallLongest = path;
-            }
-        }
-
-        return overallLongest;
-    }
-
-    private List<ResourceLocation> dfsLongest(ResourceLocation id,
-                                              Map<ResourceLocation, List<ResourceLocation>> children,
-                                              Map<ResourceLocation, List<ResourceLocation>> memo) {
-        if (memo.containsKey(id)) {
-            return memo.get(id);
-        }
-
-        List<ResourceLocation> bestPath = new ArrayList<>();
-        bestPath.add(id);
-
-        List<ResourceLocation> childList = children.getOrDefault(id, List.of());
-        for (ResourceLocation child : childList) {
-            List<ResourceLocation> childPath = dfsLongest(child, children, memo);
-            // If this child's path plus the current node is longer than the best so far, update
-            if (childPath.size() + 1 > bestPath.size()) {
-                bestPath = new ArrayList<>();
-                bestPath.add(id);
-                bestPath.addAll(childPath);
-            }
-        }
-
-        memo.put(id, bestPath);
-        return bestPath;
-    }
 
     private void buildTreeLayout() {
-        treeNodes.clear();
         treeConnections.clear();
+        treeNodes.clear();
+        dummyNodes.clear();
 
         if (selected == null || !allTechs.containsKey(selected)) {
             treeContentWidth = 0;
@@ -265,285 +206,69 @@ public class TechnologyTreeScreen extends Screen {
             return;
         }
 
-        Set<ResourceLocation> visibleReal = new HashSet<>();
+        TechnologyTree visibleTree = tree.getVisibleSubtreeOf(selected, 5, 2);
+        Map<ResourceLocation, Integer> tierMap = visibleTree.getTiers();
 
-        // Ancestors
-        addAncestors(selected, visibleReal);
-        visibleReal.add(selected);
+        for (ResourceLocation id: visibleTree.getAllIds()) {
+            TreeRenderNode node = new TreeRenderNode(
+                    id, tierMap.get(id), false, 0, null, 0);
+            treeNodes.put(id, node);
 
-        // Children and grandchildren
-        List<ResourceLocation> children = childrenMap.getOrDefault(selected, List.of());
-        for (ResourceLocation child : children) {
-            if (allTechs.containsKey(child)) {
-                visibleReal.add(child);
-                for (ResourceLocation grandchild : childrenMap.getOrDefault(child, List.of())) {
-                    if (allTechs.containsKey(grandchild)) {
-                        visibleReal.add(grandchild);
-                    }
-                }
-            }
-        }
+            int hiddenParentCount = visibleTree.getCountNotInTree(tree.getParentIdsOf(id));
+            if (hiddenParentCount > 0) dummyNodes.put(new TreeRenderNode(
+                    null, tierMap.get(id) - 1, true, hiddenParentCount, id, -1
+            ), id);
 
-        // Direct siblings: share at least one direct prerequisite with selected
-        Technology selectedTech = allTechs.get(selected);
-        if (selectedTech != null && selectedTech.prerequisites() != null) {
-            for (ResourceLocation prereq : selectedTech.prerequisites()) {
-                for (ResourceLocation sibling : childrenMap.getOrDefault(prereq, List.of())) {
-                    if (!sibling.equals(selected) && allTechs.containsKey(sibling)) {
-                        visibleReal.add(sibling);
-                    }
-                }
-            }
-        }
-
-        // First-degree cousins: children of siblings of selected's direct parents
-        Set<ResourceLocation> parentSiblings = new HashSet<>();
-        if (selectedTech != null && selectedTech.prerequisites() != null) {
-            for (ResourceLocation parent : selectedTech.prerequisites()) {
-                Technology parentTech = allTechs.get(parent);
-                if (parentTech != null && parentTech.prerequisites() != null) {
-                    for (ResourceLocation grandparent : parentTech.prerequisites()) {
-                        for (ResourceLocation auntUncle : childrenMap.getOrDefault(grandparent, List.of())) {
-                            if (!auntUncle.equals(parent) && allTechs.containsKey(auntUncle)) {
-                                parentSiblings.add(auntUncle);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (ResourceLocation psib : parentSiblings) {
-            for (ResourceLocation cousin : childrenMap.getOrDefault(psib, List.of())) {
-                if (!cousin.equals(selected) && allTechs.containsKey(cousin)) {
-                    visibleReal.add(cousin);
-                }
-            }
-        }
-
-        // Assign levels
-        //1. Find amplitude
-        Map<ResourceLocation, Integer> levels = new HashMap<>();
-        List<ResourceLocation> longestPath = findLongestPath(visibleReal);
-
-        int i = 0;
-        for (ResourceLocation location : longestPath) {
-            levels.put(location, i++);
-        }
-        // node.tier = 1 + max([n.tier for n in node.parents])
-        for (ResourceLocation location: visibleReal) {
-            ResourceLocation cursor = location;
-            Set<ResourceLocation> parents = new HashSet<>(allTechs.get(cursor).prerequisites());
-            if (parents.size() == 0) {
-                levels.put(cursor, 0);
-                continue;
-            }
-            int parentTier = 1;
-            int connectionTier = longestPath.size();
-            int candidate = longestPath.size();
-
-            while (parents.size() > 0) {
-                Set<ResourceLocation> grandparents = new HashSet<>();
-                for (ResourceLocation parent: parents) {
-                    if (levels.containsKey(parent)) {
-                        connectionTier = levels.get(parent);
-                        int new_candidate = parentTier + connectionTier;
-                        if (new_candidate < candidate) candidate = new_candidate;
-                    }
-                    else grandparents.addAll(allTechs.get(parent).prerequisites());
-                }
-                parents = grandparents;
-                parentTier += 1;
-            }
-            levels.put(cursor, candidate);
-        }
-        int tier_adjustment = -levels.get(selected);
-        for (ResourceLocation techId: visibleReal) {
-            int oldValue = levels.get(techId);
-            levels.replace(techId, oldValue, oldValue + tier_adjustment);
-        }
-
-        /*
-        levels.put(selected, 0);
-        assignAncestorLevels(selected, 0, levels);
-
-        for (ResourceLocation child : childrenMap.getOrDefault(selected, List.of())) {
-            if (visibleReal.contains(child)) {
-                levels.put(child, 1);
-                for (ResourceLocation grandchild : childrenMap.getOrDefault(child, List.of())) {
-                    if (visibleReal.contains(grandchild)) {
-                        levels.put(grandchild, 2);
-                    }
-                }
-            }
-        }
-
-        // Siblings/cousins are same generation as selected
-        for (ResourceLocation id : visibleReal) {
-            levels.putIfAbsent(id, 0);
-        }
-        */
-
-        // Create real render nodes
-        List<TreeRenderNode> realNodes = new ArrayList<>();
-        for (ResourceLocation id : visibleReal) {
-            realNodes.add(new TreeRenderNode(id, levels.getOrDefault(id, 0), false, 0, null, 0));
-        }
-
-        // Create dummy nodes for hidden neighbors
-        List<TreeRenderNode> dummyNodes = new ArrayList<>();
-        for (ResourceLocation id : visibleReal) {
-            Technology tech = allTechs.get(id);
-            int level = levels.getOrDefault(id, 0);
-
-            long hiddenParents = tech.prerequisites() != null
-                    ? tech.prerequisites().stream().filter(p -> !visibleReal.contains(p)).count()
-                    : 0;
-            if (hiddenParents > 0) {
-                dummyNodes.add(new TreeRenderNode(null, level - 1, true, (int) hiddenParents, id, -1));
-            }
-
-            long hiddenChildren = childrenMap.getOrDefault(id, List.of()).stream()
-                    .filter(c -> !visibleReal.contains(c))
-                    .count();
-            if (hiddenChildren > 0) {
-                dummyNodes.add(new TreeRenderNode(null, level + 1, true, (int) hiddenChildren, id, 1));
-            }
+            int hiddenChildCount = visibleTree.getCountInTree(tree.getChildrenIdsOf(id));
+            if (hiddenChildCount > 0) dummyNodes.put(new TreeRenderNode(
+                    null, tierMap.get(id) + 1, true, hiddenParentCount, id, +1
+            ), id);
         }
 
         // Group by level
         Map<Integer, List<TreeRenderNode>> byLevel = new TreeMap<>();
-        TreeNodeMap = new HashMap<>();
-        for (TreeRenderNode node : realNodes) {
+        for (TreeRenderNode node : treeNodes.values()) {
             byLevel.computeIfAbsent(node.level, k -> new ArrayList<>()).add(node);
-
-            // populate treenodemap
-            TreeNodeMap.put(node.techId, node);
         }
-        for (TreeRenderNode node : dummyNodes) {
+        for (TreeRenderNode node : dummyNodes.keySet()) {
             byLevel.computeIfAbsent(node.level, k -> new ArrayList<>()).add(node);
         }
 
         int minLevel = byLevel.keySet().stream().min(Integer::compareTo).orElse(0);
         int maxLevel = byLevel.keySet().stream().max(Integer::compareTo).orElse(0);
 
-        treeNodes.clear();
-        for (Map.Entry<Integer, List<TreeRenderNode>> entry : byLevel.entrySet()) {
-            int level = entry.getKey();
-            List<TreeRenderNode> levelNodes = entry.getValue();
-            levelNodes.sort(Comparator
-                    .comparing((TreeRenderNode n) -> !n.isReal())
-                    .thenComparing(n -> n.techId != null && n.techId.equals(selected) ? 0 : 1)
-                    .thenComparing(n -> n.techId != null ? allTechs.get(n.techId).name() : "")
-                    .thenComparingInt(n -> n.dummyCount));
-
-            int x = TREE_MARGIN;
-            for (TreeRenderNode node : levelNodes) {
-                node.x = x;
-                node.y = TREE_MARGIN + (level - minLevel) * (TREE_NODE_HEIGHT + TREE_V_SPACING);
-                treeNodes.add(node);
-                x += TREE_NODE_WIDTH + TREE_H_SPACING;
+        byLevel.forEach((tier, list) -> {
+            int i = 0;
+            for (TreeRenderNode node: list) {
+                node.x = TREE_MARGIN + i++ * (TREE_NODE_WIDTH + TREE_H_SPACING);
+                node.y = TREE_MARGIN + tier * (TREE_NODE_HEIGHT + TREE_V_SPACING);
             }
+        });
 
-        }
 
         // Content bounds
         treeContentWidth = 0;
         treeContentHeight = 0;
-        for (TreeRenderNode node : treeNodes) {
+        for (TreeRenderNode node : treeNodes.values()) {
             treeContentWidth = Math.max(treeContentWidth, node.x + TREE_NODE_WIDTH + TREE_MARGIN);
             treeContentHeight = Math.max(treeContentHeight, node.y + TREE_NODE_HEIGHT + TREE_MARGIN);
         }
 
         // Connections
         treeConnections.clear();
-        Map<ResourceLocation, TreeRenderNode> byTechId = new HashMap<>();
-        for (TreeRenderNode node : treeNodes) {
-            if (node.isReal()) byTechId.put(node.techId, node);
-        }
 
-        // Real connections
-        for (TreeRenderNode node : treeNodes) {
-            if (!node.isReal()) continue;
-            ResourceLocation id = node.techId;
-            Technology tech = allTechs.get(id);
-
-            if (tech.prerequisites() != null) {
-                for (ResourceLocation prereq : tech.prerequisites()) {
-                    if (visibleReal.contains(prereq)) {
-                        TreeRenderNode from = byTechId.get(prereq);
-                        if (from != null) treeConnections.add(new TreeConnection(from, node));
-                    }
-                }
-            }
-
-            for (ResourceLocation child : childrenMap.getOrDefault(id, List.of())) {
-                if (visibleReal.contains(child)) {
-                    TreeRenderNode to = byTechId.get(child);
-                    if (to != null) treeConnections.add(new TreeConnection(node, to));
-                }
+        for (ResourceLocation parentId: visibleTree.getAllIds()) {
+            for (ResourceLocation childId: visibleTree.getChildrenIdsOf(parentId)) {
+                treeConnections.add(new TreeConnection(treeNodes.get(parentId), treeNodes.get(childId)));
             }
         }
 
-        // Dummy connections
-        for (TreeRenderNode node : treeNodes) {
-            if (!node.isReal()) continue;
-            ResourceLocation id = node.techId;
-            Technology tech = allTechs.get(id);
-
-            long hiddenParents = tech.prerequisites() != null
-                    ? tech.prerequisites().stream().filter(p -> !visibleReal.contains(p)).count()
-                    : 0;
-            if (hiddenParents > 0) {
-                TreeRenderNode dummy = findDummyFor(node, -1);
-                if (dummy != null) treeConnections.add(new TreeConnection(dummy, node));
-            }
-
-            long hiddenChildren = childrenMap.getOrDefault(id, List.of()).stream()
-                    .filter(c -> !visibleReal.contains(c))
-                    .count();
-            if (hiddenChildren > 0) {
-                TreeRenderNode dummy = findDummyFor(node, 1);
-                if (dummy != null) treeConnections.add(new TreeConnection(node, dummy));
-            }
-        }
-    }
-
-    private void addAncestors(ResourceLocation id, Set<ResourceLocation> visible) {
-        Technology tech = allTechs.get(id);
-        if (tech != null && tech.prerequisites() != null) {
-            for (ResourceLocation prereq : tech.prerequisites()) {
-                if (allTechs.containsKey(prereq) && visible.add(prereq)) {
-                    addAncestors(prereq, visible);
-                }
-            }
-        }
-    }
-
-    private void assignAncestorLevels(ResourceLocation id, int level, Map<ResourceLocation, Integer> levels) {
-        Technology tech = allTechs.get(id);
-        if (tech != null && tech.prerequisites() != null) {
-            for (ResourceLocation prereq : tech.prerequisites()) {
-                if (allTechs.containsKey(prereq)) {
-                    int newLevel = level - 1;
-                    Integer existing = levels.get(prereq);
-                    if (existing == null || newLevel < existing) {
-                        levels.put(prereq, newLevel);
-                        assignAncestorLevels(prereq, newLevel, levels);
-                    }
-                }
-            }
-        }
-    }
-
-    private TreeRenderNode findDummyFor(TreeRenderNode node, int direction) {
-        for (TreeRenderNode dummy : treeNodes) {
-            if (dummy.isDummy()
-                    && Objects.equals(dummy.attachToId, node.techId)
-                    && dummy.attachDirection == direction) {
-                return dummy;
-            }
-        }
-        return null;
+        dummyNodes.forEach((node, id) -> {
+            if (node.attachDirection > 0)
+                treeConnections.add(new TreeConnection(treeNodes.get(id), node));
+            else
+                treeConnections.add(new TreeConnection(node, treeNodes.get(id)));
+        });
     }
 
     @Override
@@ -591,6 +316,9 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private void renderInfoPanel(GuiGraphics guiGraphics) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(0.0F, 0.0F, 199.0F); // Moves layer forward
+
         int x = SIDEBAR_X;
         int y = SIDEBAR_Y;
         int w = SIDEBAR_WIDTH;
@@ -696,7 +424,7 @@ public class TechnologyTreeScreen extends Screen {
             int tw = font.width(progressText);
             guiGraphics.drawString(font, progressText, barX + barW / 2 - tw / 2, barY + 1, WHITE, false);
         }
-
+        guiGraphics.pose().popPose();
     }
 
     private void renderGrid(GuiGraphics guiGraphics, int mouseX, int mouseY) {
@@ -764,7 +492,7 @@ public class TechnologyTreeScreen extends Screen {
         }
 
         hoveredTree = findHoveredTree(mouseX, mouseY);
-        for (TreeRenderNode node : treeNodes) {
+        for (TreeRenderNode node : treeNodes.values()) {
             renderTreeNode(guiGraphics, node);
         }
 
@@ -804,6 +532,14 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private void drawTreeConnection(GuiGraphics guiGraphics, TreeConnection conn) {
+        if (conn.from == null) {
+            System.out.println("conn.from is null:" + conn);
+            return;
+        }
+        if (conn.to == null) {
+            System.out.println("conn.to is null:" + conn);
+            return;
+        }
         int midpointX1 = (conn.from.techId == null) ? TREE_NODE_WIDTH / 2 : hashClamp(conn.from.techId.toString(), TREE_NODE_WIDTH - 4);
         int midpointX2 = (conn.to.techId == null) ? TREE_NODE_WIDTH / 2 : hashClamp(conn.to.techId.toString(), TREE_NODE_WIDTH - 4);
 
@@ -883,7 +619,7 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private TreeRenderNode findHoveredTree(double mouseX, double mouseY) {
-        for (TreeRenderNode node : treeNodes) {
+        for (TreeRenderNode node : treeNodes.values()) {
             int sx = toScreenX(node.x);
             int sy = toScreenY(node.y);
             if (mouseX >= sx && mouseX <= sx + TREE_NODE_WIDTH && mouseY >= sy && mouseY <= sy + TREE_NODE_HEIGHT) {
@@ -1156,15 +892,6 @@ public class TechnologyTreeScreen extends Screen {
         return Math.max(min, Math.min(max, value));
     }
 
-    boolean isReal(ResourceLocation id) {
-        return TreeNodeMap.containsKey(id);
-    }
-
-    boolean isDummy(ResourceLocation id) {
-        return !isReal(id);
-    }
-
-
     private static class TreeRenderNode {
         final ResourceLocation techId;     // null for dummy
         final int level;
@@ -1186,10 +913,6 @@ public class TechnologyTreeScreen extends Screen {
 
         boolean isReal() {
             return !dummy;
-        }
-
-        boolean isDummy() {
-            return dummy;
         }
     }
 

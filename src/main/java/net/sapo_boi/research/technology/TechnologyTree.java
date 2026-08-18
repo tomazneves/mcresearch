@@ -20,19 +20,15 @@ public class TechnologyTree {
             Set<ResourceLocation> parents = technology.prerequisites() == null ?
                     new HashSet<>() : new HashSet<>(technology.prerequisites());
 
-            for (ResourceLocation id : parents) {
-                if (!mapChildren.containsKey(id)) mapChildren.put(id, new HashSet<>());
-                mapChildren.get(id).add(newNode.id);
-            }
-
             mapParents.put(newNode.id, parents);
+            mapChildren.put(newNode.id, new HashSet<>());
             nodes.put(newNode.id, newNode);
         }
-
-        nodes.forEach((id, node) -> {
-            for (ResourceLocation childId : mapChildren.get(id)) node.addChild(nodes.get(childId));
-            for (ResourceLocation parentId : mapParents.get(id)) node.addParent(nodes.get(parentId));
+        mapParents.forEach((childId, parentIds) -> {
+            for (ResourceLocation parentId: parentIds) mapChildren.get(parentId).add(childId);
         });
+
+        this.recalculateNeighbors();
     }
 
     private TechnologyTree(TechnologyTree tree, Set<Node> nodes, boolean dummy) {
@@ -46,6 +42,15 @@ public class TechnologyTree {
         }
     }
 
+    private void recalculateNeighbors() {
+        nodes.forEach((id, node) -> {
+            node.children = new HashSet<>();
+            node.parents = new HashSet<>();
+            for (ResourceLocation childId : mapChildren.get(id)) node.addChild(nodes.get(childId));
+            for (ResourceLocation parentId : mapParents.get(id)) node.addParent(nodes.get(parentId));
+        });
+    }
+
     public TechnologyTree(TechnologyTree tree, Set<ResourceLocation> ids) {
         this.nodes = new HashMap<>();
         this.mapParents = new HashMap<>();
@@ -55,10 +60,23 @@ public class TechnologyTree {
             this.mapChildren.put(id, tree.mapChildren.get(id));
             this.mapParents.put(id, tree.mapParents.get(id));
         }
+        this.recalculateNeighbors();
     }
 
     private Set<Node> getAllNodes() {
         return new HashSet<>(nodes.values());
+    }
+
+    public Set<ResourceLocation> getAllIds() {
+        return nodes.keySet();
+    }
+
+    public boolean contains(ResourceLocation id) {
+        return nodes.containsKey(id);
+    }
+
+    private boolean contains(Node node) {
+        return nodes.containsValue(node);
     }
 
     public Set<ResourceLocation> getParentIdsOf(ResourceLocation id) {
@@ -177,12 +195,13 @@ public class TechnologyTree {
 
     public List<ResourceLocation> topologicalSortIds() {
         List<ResourceLocation> sorted = new ArrayList<>();
-        List<Node> unmarked = List.copyOf(getAllNodes());
+        List<Node> unmarked = new ArrayList<>(nodes.values());
         // assume acyclic
         while (!unmarked.isEmpty()) {
             Node node = unmarked.get(0);
             _topologicalSortVisit(node, unmarked, sorted);
         }
+        for (ResourceLocation id: sorted) System.out.println(id.toString());
         return sorted;
     }
 
@@ -195,6 +214,22 @@ public class TechnologyTree {
     private List<Node> getLongestPath() {
         List<Node> topologicalSorting = topologicalSort();
         return getLongestPath(topologicalSorting);
+    }
+
+    public int getCountInTree(Collection<ResourceLocation> set) {
+        int count = 0;
+        for (ResourceLocation id: set) {
+            if (contains(id)) count += 1;
+        }
+        return count;
+    }
+
+    public int getCountNotInTree(Collection<ResourceLocation> set) {
+        int count = 0;
+        for (ResourceLocation id: set) {
+            if (!contains(id)) count += 1;
+        }
+        return count;
     }
 
     private List<Node> getLongestPath(List<Node> topologicalSorting) {
@@ -247,14 +282,22 @@ public class TechnologyTree {
         List<Node> topologicalSorting = topologicalSort();
 
         for (Node node: topologicalSorting) {
+            System.out.println("Tiering node \"" + node.toString() + "\":");
             if (node.parents.isEmpty()) map.put(node.id, 0);
             int largestParentTier = 0;
             for (Node parent: node.parents) {
                 int parentTier = map.getOrDefault(parent.id, 0);
-                if (parentTier > largestParentTier) largestParentTier = parentTier;
+                if (parentTier > largestParentTier) {
+                    largestParentTier = parentTier;
+                    System.out.println("> New largest parent tier: " + largestParentTier);
+                }
             }
             map.put(node.id, largestParentTier + 1);
+            System.out.println(">>> Tier = " + (largestParentTier + 1) + "\n");
         }
+        map.forEach((id, i) -> {
+            System.out.println(i + ".\t" + id.toString());
+        });
         return map;
     }
 
@@ -320,6 +363,10 @@ public class TechnologyTree {
             Set<ResourceLocation> ids = new HashSet<>();
             for (Node node : children) ids.add(node.id);
             return ids;
+        }
+
+        public String toString() {
+            return id.toString() + "(" + parents.size() + "P" + children.size() + "C)";
         }
 
     }
