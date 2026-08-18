@@ -1,5 +1,6 @@
 package net.sapo_boi.research.client;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,6 +51,10 @@ public class ClientResearchData {
         currentId = id;
         progressRemaining = remaining;
         progressCost = cost;
+
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.screen == null) return;
+        if (minecraft.screen instanceof TechnologyTreeScreen screen) screen.refresh();
     }
 
     public static void setCurrent(Technology technology) {
