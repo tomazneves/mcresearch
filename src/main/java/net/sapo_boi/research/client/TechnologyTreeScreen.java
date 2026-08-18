@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.sapo_boi.research.ResearchMod;
 import net.sapo_boi.research.network.ServerboundSetCurrentTechnologyPacket;
 import net.sapo_boi.research.technology.Technology;
+import net.sapo_boi.research.technology.TechnologyTree;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,8 +64,10 @@ public class TechnologyTreeScreen extends Screen {
     private ResourceLocation current;
     private ResourceLocation selected;
     private ResourceLocation hovered;
+    private Map<ResourceLocation, TreeRenderNode> TreeNodeMap = new HashMap<>();
 
     private final Map<ResourceLocation, List<ResourceLocation>> childrenMap = new HashMap<>();
+    private TechnologyTree tree;
 
     // Tree layout
     private final List<TreeRenderNode> treeNodes = new ArrayList<>();
@@ -78,6 +81,7 @@ public class TechnologyTreeScreen extends Screen {
 
     // Grid
     private final List<ResourceLocation> gridOrder = new ArrayList<>();
+    private Map<ResourceLocation, List<Integer>> gridMap = new HashMap<>();
     private double gridScroll;
     private int gridContentHeight;
 
@@ -92,8 +96,12 @@ public class TechnologyTreeScreen extends Screen {
     protected void init() {
         super.init();
 
+
         this.allTechs = ClientResearchData.getTechnologies().stream()
                 .collect(Collectors.toMap(Technology::id, t -> t));
+
+        this.tree = new TechnologyTree(this.allTechs.values());
+
         this.unlocked = new HashSet<>(ClientResearchData.getUnlocked());
         this.current = ClientResearchData.getCurrentId();
         this.selected = current; // initially focus on the current research, if any
@@ -314,11 +322,47 @@ public class TechnologyTreeScreen extends Screen {
 
         // Assign levels
         //1. Find amplitude
+        Map<ResourceLocation, Integer> levels = new HashMap<>();
         List<ResourceLocation> longestPath = findLongestPath(visibleReal);
 
+        int i = 0;
+        for (ResourceLocation location : longestPath) {
+            levels.put(location, i++);
+        }
+        // node.tier = 1 + max([n.tier for n in node.parents])
+        for (ResourceLocation location: visibleReal) {
+            ResourceLocation cursor = location;
+            Set<ResourceLocation> parents = new HashSet<>(allTechs.get(cursor).prerequisites());
+            if (parents.size() == 0) {
+                levels.put(cursor, 0);
+                continue;
+            }
+            int parentTier = 1;
+            int connectionTier = longestPath.size();
+            int candidate = longestPath.size();
+
+            while (parents.size() > 0) {
+                Set<ResourceLocation> grandparents = new HashSet<>();
+                for (ResourceLocation parent: parents) {
+                    if (levels.containsKey(parent)) {
+                        connectionTier = levels.get(parent);
+                        int new_candidate = parentTier + connectionTier;
+                        if (new_candidate < candidate) candidate = new_candidate;
+                    }
+                    else grandparents.addAll(allTechs.get(parent).prerequisites());
+                }
+                parents = grandparents;
+                parentTier += 1;
+            }
+            levels.put(cursor, candidate);
+        }
+        int tier_adjustment = -levels.get(selected);
+        for (ResourceLocation techId: visibleReal) {
+            int oldValue = levels.get(techId);
+            levels.replace(techId, oldValue, oldValue + tier_adjustment);
+        }
 
         /*
-        Map<ResourceLocation, Integer> levels = new HashMap<>();
         levels.put(selected, 0);
         assignAncestorLevels(selected, 0, levels);
 
@@ -368,8 +412,12 @@ public class TechnologyTreeScreen extends Screen {
 
         // Group by level
         Map<Integer, List<TreeRenderNode>> byLevel = new TreeMap<>();
+        TreeNodeMap = new HashMap<>();
         for (TreeRenderNode node : realNodes) {
             byLevel.computeIfAbsent(node.level, k -> new ArrayList<>()).add(node);
+
+            // populate treenodemap
+            TreeNodeMap.put(node.techId, node);
         }
         for (TreeRenderNode node : dummyNodes) {
             byLevel.computeIfAbsent(node.level, k -> new ArrayList<>()).add(node);
@@ -395,6 +443,7 @@ public class TechnologyTreeScreen extends Screen {
                 treeNodes.add(node);
                 x += TREE_NODE_WIDTH + TREE_H_SPACING;
             }
+
         }
 
         // Content bounds
@@ -515,9 +564,11 @@ public class TechnologyTreeScreen extends Screen {
                 && arePrerequisitesMet(allTechs.get(selected));
         cancelButton.active = current != null;
 
+        hovered = getGridCellUnderMouse(mouseX, mouseY);
         renderInfoPanel(guiGraphics);
         renderGrid(guiGraphics, mouseX, mouseY);
         renderTree(guiGraphics, mouseX, mouseY);
+        renderOutlines(guiGraphics);
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
@@ -525,9 +576,18 @@ public class TechnologyTreeScreen extends Screen {
             hovered = hoveredTree.techId;
             renderTreeTooltip(guiGraphics, hoveredTree, mouseX, mouseY);
         }
-        else {
+        else if (mouseX > SIDEBAR_WIDTH){
             hovered = null;
         }
+    }
+
+    private ResourceLocation getFocusedId() {
+        ResourceLocation displayId = null;
+        if (hovered != null) displayId = hovered;
+        else if (selected != null) displayId = selected;
+        else if (current != null) displayId = current;
+
+        return displayId;
     }
 
     private void renderInfoPanel(GuiGraphics guiGraphics) {
@@ -542,10 +602,7 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.fill(x, y, x + 1, y + h, WHITE);
         guiGraphics.fill(x + w - 1, y, x + w, y + h, WHITE);
 
-        ResourceLocation displayId = null;
-        if (hovered != null && hoveredTree.isReal()) displayId = hovered;
-        else if (selected != null) displayId = selected;
-        else if (current != null) displayId = current;
+        ResourceLocation displayId = getFocusedId();
 
         if (displayId == null) {
             guiGraphics.drawString(font, "No technology selected", x + 8, y + 8, WHITE, false);
@@ -667,13 +724,7 @@ public class TechnologyTreeScreen extends Screen {
             ResourceLocation id = gridOrder.get(i);
             int color = getNodeColor(id);
             guiGraphics.fill(cellX, cellY, cellX + cellSize, cellY + cellSize, color);
-
-            if (Objects.equals(id, selected)) {
-                guiGraphics.fill(cellX - 1, cellY - 1, cellX + cellSize + 1, cellY, WHITE);
-                guiGraphics.fill(cellX - 1, cellY + cellSize, cellX + cellSize + 1, cellY + cellSize + 1, WHITE);
-                guiGraphics.fill(cellX - 1, cellY, cellX, cellY + cellSize, WHITE);
-                guiGraphics.fill(cellX + cellSize, cellY, cellX + cellSize + 1, cellY + cellSize, WHITE);
-            }
+            gridMap.put(id, List.of(cellX, cellY));
 
             Technology tech = allTechs.get(id);
             ItemStack icon = createStack(tech.icon());
@@ -693,6 +744,10 @@ public class TechnologyTreeScreen extends Screen {
         }
 
         guiGraphics.disableScissor();
+    }
+
+    private void renderParents(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+
     }
 
     private void renderTree(GuiGraphics guiGraphics, int mouseX, int mouseY) {
@@ -718,6 +773,26 @@ public class TechnologyTreeScreen extends Screen {
         if (treeNodes.isEmpty()) {
             guiGraphics.drawCenteredString(font, Component.literal("Select a technology from the grid"), x + w / 2, y + h / 2, WHITE);
         }
+    }
+
+    private void renderNodeOutlines(GuiGraphics guiGraphics, ResourceLocation location, int color) {
+        List<Integer> gridPosition = gridMap.getOrDefault(location, null);
+        if (gridPosition != null)
+            guiGraphics.renderOutline(gridPosition.get(0), gridPosition.get(1), GRID_CELL_SIZE, GRID_CELL_SIZE, color);
+        TreeRenderNode treeNode = TreeNodeMap.getOrDefault(location, null);
+        if (treeNode != null)
+            guiGraphics.renderOutline(toScreenX(treeNode.x), toScreenY(treeNode.y), TREE_NODE_WIDTH, TREE_NODE_HEIGHT, color);
+    }
+
+    private void renderOutlines(GuiGraphics guiGraphics) {
+        ResourceLocation focused = getFocusedId();
+        if (focused == null) return;
+        renderNodeOutlines(guiGraphics, focused, WHITE);
+
+        //if (focused != hovered) return;
+
+        for (ResourceLocation parentId : allTechs.get(focused).prerequisites())
+            renderNodeOutlines(guiGraphics, parentId, YELLOW);
     }
 
     private int hashClamp(String str, int min, int max) {
@@ -761,9 +836,26 @@ public class TechnologyTreeScreen extends Screen {
         int color = node.isReal() ? getNodeColor(node.techId) : TRANSPARENT;
         guiGraphics.fill(sx, sy, sx + TREE_NODE_WIDTH, sy + TREE_NODE_HEIGHT, color);
 
-        if ((node == hoveredTree && node.isReal()) || (hoveredTree == null && node.techId == selected))
+        /* OUTLINES
+        if ((node == hoveredTree && node.isReal()) || ((hoveredTree == null || hoveredTree.isDummy()) && node.techId == selected)) {
             guiGraphics.renderOutline(sx, sy, TREE_NODE_WIDTH, TREE_NODE_HEIGHT, WHITE);
 
+            for (ResourceLocation parentId : allTechs.get(node.techId).prerequisites()) {
+                TreeRenderNode parentNode = TreeNodeMap.getOrDefault(parentId, null);
+                if (parentNode == null) continue;
+
+                guiGraphics.renderOutline(
+                        toScreenX(parentNode.x),
+                        toScreenY(parentNode.y),
+                        TREE_NODE_WIDTH,
+                        TREE_NODE_HEIGHT,
+                        getNodeColor(parentId)
+                );
+            }
+        }
+
+
+         */
         if (node.isReal()) {
             Technology tech = allTechs.get(node.techId);
             ItemStack icon = createStack(tech.icon());
@@ -937,7 +1029,17 @@ public class TechnologyTreeScreen extends Screen {
                 && mouseY >= TREE_Y && mouseY <= TREE_Y + getTreeHeight();
     }
 
-    private void handleGridClick(double mouseX, double mouseY) {
+    private ResourceLocation getNodeUnderMouse(double mouseX, double mouseY) {
+        if (!isMouseInTree(mouseX, mouseY)) return  null;
+
+        // TODO
+
+        return null;
+    }
+
+    private ResourceLocation getGridCellUnderMouse(double mouseX, double mouseY) {
+        if (!isMouseInGrid(mouseX, mouseY)) return null;
+
         int columns = getGridColumns();
         int cellSize = GRID_CELL_SIZE;
         int pad = GRID_CELL_PADDING;
@@ -950,7 +1052,15 @@ public class TechnologyTreeScreen extends Screen {
         int index = row * columns + col;
 
         if (index >= 0 && index < gridOrder.size()) {
-            selected = gridOrder.get(index);
+            return gridOrder.get(index);
+        }
+        return null;
+    }
+
+    private void handleGridClick(double mouseX, double mouseY) {
+        ResourceLocation cell = getGridCellUnderMouse(mouseX, mouseY);
+        if (cell != null) {
+            selected = cell;
             buildTreeLayout();
         }
     }
@@ -1045,6 +1155,15 @@ public class TechnologyTreeScreen extends Screen {
     private double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
+
+    boolean isReal(ResourceLocation id) {
+        return TreeNodeMap.containsKey(id);
+    }
+
+    boolean isDummy(ResourceLocation id) {
+        return !isReal(id);
+    }
+
 
     private static class TreeRenderNode {
         final ResourceLocation techId;     // null for dummy
